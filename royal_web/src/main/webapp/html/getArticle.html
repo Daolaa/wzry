@@ -15,15 +15,18 @@
     <script>
         var articleId = getParameter("articleId");
         $(function () {
+            //给评论框添加 articleId
+            $("#articleId_comment").val(articleId);
+            $("#reply_articleId").val(articleId);
 
-            $.post("/article/findByArticleId.do",{"articleId":articleId},function (data) {
-                var titleStr = "<h2 class=\"l\">"+data.title+"</h2>\n" +
+            $.post("/article/findByArticleId.do", {"articleId": articleId}, function (data) {
+                var titleStr = "<h2 class=\"l\">" + data.title + "</h2>\n" +
                     "                    <div class=\"hm-detail-fun l\">\n" +
                     "\t\t\t\t\t     <span class=\"icon-like\">\n" +
-                    "\t\t\t\t\t         <a href=\"#\"><i></i>"+data.upvoteCount+"</a>\n" +
+                    "\t\t\t\t\t         <a href=\"#\"><i></i>" + data.upvoteCount + "</a>\n" +
                     "\t\t\t\t\t     </span>\n" +
                     "                        <span class=\"icon-talk\">\n" +
-                    "\t\t\t\t\t\t     <i></i>"+data.replyCount+"\n" +
+                    "\t\t\t\t\t\t     <i></i>" + data.replyCount + "\n" +
                     "\t\t\t\t\t\t</span>\n" +
                     "                    </div>";
                 $("#title_div").html(titleStr);
@@ -32,65 +35,67 @@
                 //原来帖楼
                 var articleStr = "<li class=\"floor clearfix\">" +
                     "           <div class=\"floorer-info l\">\n" +
-    "                        <div class=\"floorer-photo\"><img src=\"../images/default.png\"/></div>\n" +
-    "                        <div class=\"floorer-name\">"+data.senderName+"</div>\n" +
-    "                    </div>\n" +
-    "                    <div class=\"floor-con l\">\n" +
-    "                        <div class=\"floor-info clearfix\">\n" +
-    "                            <div class=\"floor-time l\">发帖时间："+data.sendTimeStr+"</div>\n" +
-    "                            <div class=\"r\">"+data.browseCount+"次查看</div>\n" +
-    "                        </div>\n" +
-    "                        <div class=\"floor-art-ans\">\n" +
-    "                            <div class=\"floor-art\">\n" +
-    "                                <p>"+data.content+"</p>\n" +
-    "                            </div>\n" +
-    "                            <div class=\"floor-ans\"></div>\n" +
-    "                        </div>\n" +
-    "                        <span class=\"icon-comment\"><a href=\"#comment\"> <i></i> 评论</a></span>\n" +
-    "                    </div>" +
-                        "</li>";
-
-                //评论
-                if(data.comments != null){
-                    $.each(data.comments,function (index, comment) {
-                        articleStr+="<li class=\"floor clearfix\">\n" +
-                    "                    <div class=\"floorer-info l\">\n" +
                     "                        <div class=\"floorer-photo\"><img src=\"../images/default.png\"/></div>\n" +
-                    "                        <div class=\"floorer-name\">"+comment.commentUserName+"</div>\n" +
+                    "                        <div class=\"floorer-name\">" + data.senderName + "</div>\n" +
                     "                    </div>\n" +
                     "                    <div class=\"floor-con l\">\n" +
                     "                        <div class=\"floor-info clearfix\">\n" +
-                    "                            <div class=\"floor-time l\">回贴时间："+comment.commentTimeStr+"</div>\n" +
-                    "                            <div class=\"r\">"+(index+1)+"楼</div>\n" +
+                    "                            <div class=\"floor-time l\">发帖时间：" + data.sendTimeStr + "</div>\n" +
+                    "                            <div class=\"r\">" + data.browseCount + "次查看</div>\n" +
                     "                        </div>\n" +
                     "                        <div class=\"floor-art-ans\">\n" +
                     "                            <div class=\"floor-art\">\n" +
-                    "                                <p>"+comment.commentContent+"</p>\n" +
+                    "                                <p>" + data.content + "</p>\n" +
                     "                            </div>\n" +
-                    "                            <div class=\"floor-ans\">\n" +
-                    "                                ";
-                        //回复
-                        if( comment.replies != null){
-                            $.each(comment.replies,function (index, reply) {
-                                articleStr += "<ul>\n" +
-"                                    <!-- 回复部分,楼中楼 -->\n" +
-"                                    <li class=\"clearfix\">\n" +
-"                                        <div class=\"floor-ans-pho l\"><img src=\"../images/default.png\"/></div>\n" +
-"                                        <div class=\"floor-ans-con l\">\n" +
-"                                            <span class=\"name\">"+reply.replyUserName+"</span>："+reply.replyContent+"\n" +
-"                                            <span class=\"ans-time\">"+reply.replyTimeStr+"</span>\n" +
-"                                        </div>\n" +
-"                                    </li>\n" +
-"                                </ul>";
-                            })
+                    "                            <div class=\"floor-ans\"></div>\n" +
+                    "                        </div>\n" +
+                    "                        <span class=\"icon-comment\"><a href=\"#comment\"> <i></i> 评论</a></span>\n" +
+                    "                    </div>" +
+                    "</li>";
+
+                //评论
+                if (data.comments != null) {
+                    $.each(data.comments, function (index, comment) {
+                        if(comment.commentStatus != 1) {
+                            articleStr += "<li class=\"floor clearfix\">\n" +
+                                "                    <div class=\"floorer-info l\">\n" +
+                                "                        <div class=\"floorer-photo\"><img src=\"../images/default.png\"/></div>\n" +
+                                "                        <div class=\"floorer-name\">" + comment.commentUserName + "</div>\n" +
+                                "                    </div>\n" +
+                                "                    <div class=\"floor-con l\">\n" +
+                                "                        <div class=\"floor-info clearfix\">\n" +
+                                "                            <div class=\"floor-time l\">回贴时间：" + comment.commentTimeStr + "</div>\n" +
+                                "                            <div class=\"r\">" + (index + 1) + "楼</div>\n" +
+                                "                        </div>\n" +
+                                "                        <div class=\"floor-art-ans\">\n" +
+                                "                            <div class=\"floor-art\">\n" +
+                                "                                <p>" + comment.commentContent + "</p>\n" +
+                                "                            </div>\n" +
+                                "                            <div class=\"floor-ans\">\n" +
+                                "                                ";
+                            //回复
+                            if (comment.replies != null) {
+                                $.each(comment.replies, function (index, reply) {
+                                    articleStr += "<ul>\n" +
+                                        "                                    <!-- 回复部分,楼中楼 -->\n" +
+                                        "                                    <li class=\"clearfix\">\n" +
+                                        "                                        <div class=\"floor-ans-pho l\"><img src=\"../images/default.png\"/></div>\n" +
+                                        "                                        <div class=\"floor-ans-con l\">\n" +
+                                        "                                            <span class=\"name\">" + reply.replyUserName + "</span>：" + reply.replyContent + "\n" +
+                                        "                                            <span class=\"ans-time\">" + reply.replyTimeStr + "</span>\n" +
+                                        "                                        </div>\n" +
+                                        "                                    </li>\n" +
+                                        "                                </ul>";
+                                })
+                            }
+                            articleStr += "</div>\n" +
+                                "                            <span class=\"icon-feedback\">\n" +
+                                "                                <a href=\"javascript:;\" onclick=\"showDialog(" + (index + 1) + "," + comment.commentId + ")\"> <i></i> 回复</a>\n" +
+                                "                            </span>\n" +
+                                "                        </div>\n" +
+                                "                    </div>\n" +
+                                "                </li>";
                         }
-                        articleStr += "</div>\n" +
-    "                            <span class=\"icon-feedback\">\n" +
-    "                                <a href=\"javascript:;\" onclick=\"showDialog("+(index+1)+")\"> <i></i> 回复</a>\n" +
-    "                            </span>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "                </li>";
                     })
 
                 }
@@ -121,7 +126,8 @@
                     <form action="" method="post">
                         <ul class="editInfos">
                             <li>用户名：<input type="text" id="userName" name="userName" class="ipt"/></li>
-                            <li>密&nbsp;&nbsp;&nbsp;码：<input type="password" id="userPass" name="userPass" class="ipt"/></li>
+                            <li>密&nbsp;&nbsp;&nbsp;码：<input type="password" id="userPass" name="userPass" class="ipt"/>
+                            </li>
                             <li><input type="submit" value="登录" class="submitBtn"/></li>
                         </ul>
                     </form>
@@ -130,7 +136,6 @@
         </div>
     </div>
 </div>
-
 
 
 <div class="hm-header"></div>
@@ -189,10 +194,11 @@
             <!-- 未登录时候显示 <div class="con">您没有登录论坛，请登录后再进行回复</div>-->
 
             <!-- 登录后显示评论输入框-->
-            <form action="#" method="post">
+            <form action="/comment/addComment.do" method="post" id="comment">
+                <input id="articleId_comment" type="hidden" name="articleId" value="">
                 <div class="con con-loged">
                     <div class="con-t">
-                        <textarea id="content" name="content" placeholder="请在此输入您要回复的信息"></textarea>
+                        <textarea id="content" name="commentContent" placeholder="请在此输入您要回复的信息"></textarea>
                     </div>
                     <div class="con-b">
                         <input type="submit" class="btn"/>
@@ -200,10 +206,10 @@
                     </div>
                 </div>
             </form>
+
         </div>
     </div>
 </div>
-
 
 
 <!-- 底部 -->
@@ -217,10 +223,10 @@
 </div>
 
 
-
 <!-- 回复弹出框 -->
 <form action="/reply/addReplyByCommentId.do" method="post">
     <input type="hidden" name="commentId" id="commentId" value="">
+    <input type="hidden" name="articleId" value="" id="reply_articleId"/>
     <div class="pop-box ft-box">
         <div class="mask"></div>
         <div class="win">
@@ -230,7 +236,7 @@
             </div>
             <div class="win_bd">
                 <div class="win_bd_b">
-                    <textarea id="replyContent" name="content" placeholder="回复内容限于40字以内"></textarea>
+                    <textarea id="replyContent" name="replyContent" placeholder="回复内容限于40字以内"></textarea>
                 </div>
             </div>
             <div class="win_ft">
@@ -243,7 +249,6 @@
 </form>
 
 
-
 <div class="fixedBar" id="j_fixedBar">
     <a href="#comment" class="newTopic"><span></span>回复</a>
     <a href="#" class="goTop"><i></i><span>返回<br/>顶部</span></a>
@@ -253,10 +258,11 @@
 </body>
 
 <script type="text/javascript">
-//弹出回复框
-function showDialog(num) {
-    $('.pop-box').css('display', 'block');
-    $("#floorSpan").html(num);
-}
+    //弹出回复框
+    function showDialog(num,commentId) {
+        $('.pop-box').css('display', 'block');
+        $("#floorSpan").html(num);
+        $("#commentId").val(commentId);
+    }
 </script>
 </html>

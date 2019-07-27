@@ -20,7 +20,7 @@ public class Article {
     private Integer upvoteCount;//点赞数
     private Integer browseCount;//浏览数
     private Integer zoneId;//所在交流区
-    private Integer isReport;//举报状态 0是没有举报 1是有举报
+    private Integer isReport;//屏蔽状态 0是没有屏蔽 1是有屏蔽
     private List<Comment> comments;//用于封装帖子下的所有评论
 
     public String getSendTimeStr() {

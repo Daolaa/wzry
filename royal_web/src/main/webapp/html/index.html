@@ -59,7 +59,7 @@
                 var str = "";
                 //这个遍历是先遍历置顶的
                 $.each(data,function (index, ele) {
-                    if (ele.isTop == 1) {
+                    if (ele.isTop == 1 && ele.isReport !=1) {
                         str += "<li class=\"clearfix ding\">\n" +
         "                        <div class=\"hm-index-title\">\n" +
         "                            <i class=\"set-to-top\">顶</i> <a href=\"html/getArticle.html?articleId="+ele.articleId+"\">" + ele.title + "</a>\n" +
@@ -78,7 +78,7 @@
                 })
                 //这个遍历是没有置顶的
                 $.each(data,function (index, ele) {
-                    if (ele.isTop == 0) {
+                    if (ele.isTop == 0 && ele.isReport !=1) {
                         str += "<li class=\"clearfix\">\n" +
                             "    <div class=\"hm-index-title\">\n" +
                             "        <i class=\"set-to-top\">顶</i> <a href=\"html/getArticle.html?articleId="+ele.articleId+"\">" + ele.title + "</a>\n" +
@@ -103,8 +103,7 @@
                 $.post("/article/save.do",$("#form").serialize(),function (data) {
 
                     var id = data;
-                    alert(id);
-                    location.href = "getArticle.html?articleId="+id;
+                    location.href = "html/getArticle.html?articleId="+id;
                 });
             });
 

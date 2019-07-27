@@ -46,8 +46,8 @@ public class ArticleController {
     @RequestMapping("/findByArticleId.do")
     @ResponseBody
     public Article findByArticleId(String articleId){
-        int _articleId = Integer.parseInt(articleId);
-        return articleService.findByArticleId(_articleId);
+
+        return articleService.findByArticleId(Integer.parseInt(articleId));
     }
     /**
      * 通过区域id查找帖子
@@ -56,9 +56,10 @@ public class ArticleController {
      */
     @RequestMapping("/findByZoneId.do")
     @ResponseBody
-    public List<Article> findByZoneId(String zoneId){
+    public List<Article> findByZoneId(String zoneId) {
         int _id = Integer.parseInt(zoneId);
         return articleService.findByZoneId(_id);
+    }
 
     /*
         发帖数统计

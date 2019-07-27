@@ -3,13 +3,13 @@ package com.bbs.service.impl;
 import com.bbs.dao.ArticleDao;
 import com.bbs.domain.Article;
 import com.bbs.service.ArticleService;
+import com.bbs.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Date;
 import org.springframework.transaction.annotation.Transactional;
-import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 @Service
 @Transactional
 public class ArticleServiceImpl implements ArticleService {
@@ -44,6 +44,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Article findByArticleId(Integer articleId) {
         return articleDao.findByArticleId(articleId);
+    }
 
     /*
         统计帖子数
@@ -56,17 +57,16 @@ public class ArticleServiceImpl implements ArticleService {
 
         //获取今日发帖数
         int count = 0; //统计今日发帖数
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String nowTime = simpleDateFormat.format(new Date());//当期日期
+
+        String nowTime = DateUtils.date2String(new Date(),"yyyy-MM-dd");
 
         List<Article> articles = articleDao.findAll();
         for (Article article : articles) {
-            String sendTime = simpleDateFormat.format(article.getSendTime());
+            String sendTime = DateUtils.date2String(article.getSendTime(),"yyyy-MM-dd");
             if (nowTime.equals(sendTime)){
                 count++;
             }
         }
-
 
         list.add(count);//添加今日发帖数
         return list;

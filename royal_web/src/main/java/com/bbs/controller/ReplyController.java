@@ -3,15 +3,15 @@ package com.bbs.controller;
 import com.bbs.domain.Reply;
 import com.bbs.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/reply")
 public class ReplyController {
 
@@ -22,6 +22,7 @@ public class ReplyController {
         根据评论ID 查询 评论的回复
      */
     @RequestMapping("/findReplyByCommentId.do")
+    @ResponseBody
     public List<Reply> findReplyByCommentId(String commentId){
         return replyService.findReplyByCommentId(commentId);
     }
@@ -31,7 +32,8 @@ public class ReplyController {
      */
 
     @RequestMapping("/addReplyByCommentId.do")
-    public String  addReplyByCommentId(Reply reply , HttpServletRequest request){
+    public String  addReplyByCommentId(Reply reply ,Integer articleId, HttpServletRequest request){
+        System.out.println(articleId);
         //添加回复时间
         reply.setReplyTime(new Date());
         //添加回复用户 从session域获取
@@ -39,6 +41,6 @@ public class ReplyController {
         replyService.addReplyByCommentId(reply);
 
 
-        return "redirect:";
+        return "redirect:/html/getArticle.html?articleId="+articleId;
     }
 }
