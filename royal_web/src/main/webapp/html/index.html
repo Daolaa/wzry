@@ -9,6 +9,99 @@
     <link rel="stylesheet" href="../css/index-new.css"/>
     <script type="text/javascript" src="../js/jquery-1.12.4.js"></script>
     <script type="text/javascript" src="../js/hm-bbs.js"></script>
+    <script src="/js/getParameter.js"></script>
+    <script>
+
+        $(function () {
+            //获取区域id
+            var zoneId = getParameter("zoneId");
+            if(zoneId == null){
+                zoneId = 1;
+            }
+            //这里是给隐藏域添加区域id 为的是发布帖子时有区域id
+            $("#zoneId").prop("value",zoneId);
+
+            //这里是区域导航
+            $.post("/zone/findAll.do",{},function (data) {
+
+                var str = "";
+                $.each(data,function (index, ele) {
+
+                    if(ele.zoneId == zoneId){
+                        str += "<li class=\"current\">\n" +
+                    "                <a href=\"/html/index.html?zoneId="+ele.zoneId+"\" ><em></em>"+ele.zoneName+"</a>\n" +
+                    "            </li>"
+                    }else {
+                        str += "<li>\n" +
+                    "                <a href=\"/html/index.html?zoneId="+ele.zoneId+"\" ><em></em>"+ele.zoneName+"</a>\n" +
+                    "            </li>"
+                    }
+                })
+
+                $("#navigation_ul").html(str);
+
+            })
+
+            //这里是区域信息
+            $.post("/article/findByZoneId.do",{zoneId:zoneId},function (data) {
+                var str = "";
+                //这个遍历是先遍历置顶的
+                $.each(data,function (index, ele) {
+                    if (ele.isTop == 1) {
+                        str += "<li class=\"clearfix ding\">\n" +
+        "                        <div class=\"hm-index-title\">\n" +
+        "                            <i class=\"set-to-top\">顶</i> <a href=\"html/getArticle.html?articleId="+ele.articleId+"\">" + ele.title + "</a>\n" +
+        "                        </div>\n" +
+        "                        <div class=\"hm-index-con\">" + ele.content + "</div>\n" +
+        "                        <div class=\"hm-index-info l\">\n" +
+        "                            <span class=\"article-username\">" + ele.senderName + "</span>\n" +
+        "                            <span class=\"post-time\">" + ele.sendTimeStr + "</span>\n" +
+        "                        </div>\n" +
+        "                        <div class=\"hm-index-fun r\">\n" +
+        "                            <span class=\"icon-like\"><i></i>" + ele.upvoteCount + "</span>\n" +
+        "                            <span class=\"icon-talk\"><i></i>" + ele.replyCount + "</span>\n" +
+        "                        </div>\n" +
+        "                    </li>"
+                    }
+                })
+                //这个遍历是没有置顶的
+                $.each(data,function (index, ele) {
+                    if (ele.isTop == 0) {
+                        str += "<li class=\"clearfix\">\n" +
+                            "    <div class=\"hm-index-title\">\n" +
+                            "        <i class=\"set-to-top\">顶</i> <a href=\"html/getArticle.html?articleId="+ele.articleId+"\">" + ele.title + "</a>\n" +
+                            "    </div>\n" +
+                            "    <div class=\"hm-index-con\">" + ele.content + "</div>\n" +
+                            "    <div class=\"hm-index-info l\">\n" +
+                            "        <span class=\"article-username\">" + ele.senderName + "</span><span class=\"post-time\">" + ele.sendTimeStr + "</span>\n" +
+                            "    </div>\n" +
+                            "    <div class=\"hm-index-fun r\">\n" +
+                            "        <span class=\"icon-like\"><i></i>" + ele.upvoteCount + "</span>\n" +
+                            "        <span class=\"icon-talk\"><i></i>" + ele.replyCount + "</span>\n" +
+                            "    </div>\n" +
+                            "</li>\n"
+                    }
+                })
+                $("#article_ul").html(str)
+            })
+
+            //这里是表单提交后获取提交的帖子的id 然后要跳转到getArticle.html页面
+            // 去那里查询该帖信息回显到页面
+            $("#button").click(function () {
+                $.post("/article/save.do",$("#form").serialize(),function (data) {
+
+                    var id = data;
+                    alert(id);
+                    location.href = "getArticle.html?articleId="+id;
+                });
+            });
+
+        })
+
+
+
+    </script>
+
 </head>
 <body>
 <!-- 头部 -->
@@ -72,19 +165,8 @@
 
 
         <!-- 导航 -->
-        <ul class="hm-bbs-nav border-lrb clearfix">
-            <li class="current">
-                <a href="#"><em></em>综合交流区</a>
-            </li>
-            <li>
-                <a href="#"><em></em>BUG反馈区</a>
-            </li>
-            <li>
-                <a href="#"><em></em>新闻公告区</a>
-            </li>
-            <li>
-                <a href="#"><em></em>活动专区</a>
-            </li>
+        <ul class="hm-bbs-nav border-lrb clearfix" id="navigation_ul">
+
         </ul>
 
 
@@ -94,87 +176,7 @@
         <div class="hm-bbs-main border-lrb clearfix">
             <!-- 左侧列表 -->
             <div class="list-view l">
-                <ul>
-
-
-                    <li class="clearfix ding">
-                        <div class="hm-index-title">
-                            <i class="set-to-top">顶</i> <a href="getArticle.html">求官方出艾琳英雄活动</a>
-                        </div>
-                        <div class="hm-index-con">本人玩得迟，所以看到别人用艾琳的时候，特别羡慕，现贵族6了，很想要一个艾琳，我身边很多朋友也想要，求</div>
-                        <div class="hm-index-info l">
-                            <span class="article-username">晨曦初露</span>
-                            <span class="post-time">2017-05-24 08:00:05</span>
-                        </div>
-                        <div class="hm-index-fun r">
-                            <span class="icon-like"><i></i>1</span>
-                            <span class="icon-talk"><i></i>0</span>
-                        </div>
-                    </li>
-
-
-
-                    <li class="clearfix ding">
-                        <div class="hm-index-title">
-                            <i class="set-to-top">顶</i> <a href="getArticle.html">求官方出艾琳英雄活动</a>
-                        </div>
-                        <div class="hm-index-con">本人玩得迟，所以看到别人用艾琳的时候，特别羡慕，现贵族6了，很想要一个艾琳，我身边很多朋友也想要，求</div>
-                        <div class="hm-index-info l">
-                            <span class="article-username">晨曦初露</span><span class="post-time">2017-05-24 08:00:05</span>
-                        </div>
-                        <div class="hm-index-fun r">
-                            <span class="icon-like"><i></i>1</span>
-                            <span class="icon-talk"><i></i>0</span>
-                        </div>
-                    </li>
-                    <li class="clearfix ding">
-                        <div class="hm-index-title">
-                            <i class="set-to-top">顶</i> <a href="getArticle.html">求官方出艾琳英雄活动</a>
-                        </div>
-                        <div class="hm-index-con">本人玩得迟，所以看到别人用艾琳的时候，特别羡慕，现贵族6了，很想要一个艾琳，我身边很多朋友也想要，求</div>
-                        <div class="hm-index-info l">
-                            <span class="article-username">晨曦初露</span><span class="post-time">2017-05-24 08:00:05</span>
-                        </div>
-                        <div class="hm-index-fun r">
-                            <span class="icon-like"><i></i>1</span>
-                            <span class="icon-talk"><i></i>0</span>
-                        </div>
-                    </li>
-
-
-
-
-                    <li class="clearfix">
-                        <div class="hm-index-title">
-                            <i class="set-to-top">顶</i> <a href="getArticle.html">排位赛BUG，排不上！</a>
-                        </div>
-                        <div class="hm-index-con">现在黄金2，无论怎么匹配，都匹配不到？有次匹配了10分钟，这是为什么？</div>
-                        <div class="hm-index-info l">
-                            <span class="article-username">不哭不闹不炫耀</span><span class="post-time">2017-05-24 09:10:00</span>
-                        </div>
-                        <div class="hm-index-fun r">
-                            <span class="icon-like"><i></i>3</span>
-                            <span class="icon-talk"><i></i>10</span>
-                        </div>
-                    </li>
-
-
-
-
-                    <li class="clearfix">
-                        <div class="hm-index-title">
-                            <i class="set-to-top">顶</i> <a href="getArticle.html">排位赛BUG，排不上！</a>
-                        </div>
-                        <div class="hm-index-con">现在黄金2，无论怎么匹配，都匹配不到？有次匹配了10分钟，这是为什么？</div>
-                        <div class="hm-index-info l">
-                            <span class="article-username">不哭不闹不炫耀</span><span class="post-time">2017-05-24 09:10:00</span>
-                        </div>
-                        <div class="hm-index-fun r">
-                            <span class="icon-like"><i></i>3</span>
-                            <span class="icon-talk"><i></i>10</span>
-                        </div>
-                    </li>
-
+                <ul id="article_ul">
 
                 </ul>
             </div>
@@ -225,7 +227,7 @@
 </div>
 
 <!-- 发帖弹出框 -->
-<form action="" method="post">
+<form id="form" method="post">
     <div class="pop-box ft-box">
         <div class="mask"></div>
         <div class="win">
@@ -239,10 +241,12 @@
                 <div class="win_bd_b">
                     <textarea id="content" name="content" placeholder="正文"></textarea>
                 </div>
+                    <!--这里是一个隐藏域 为的是提交的帖子有区域id -->
+                    <input id="zoneId" type="hidden" name="zoneId"/>
             </div>
             <div class="win_ft">
                 <div class="win_ft_in">
-                    <input type="submit" class="btn" value="发表"/>
+                    <input id="button" type="button" class="btn" value="发表"/>
                 </div>
             </div>
         </div>

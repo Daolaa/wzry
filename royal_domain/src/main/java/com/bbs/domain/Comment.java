@@ -1,5 +1,7 @@
 package com.bbs.domain;
 
+import com.bbs.utils.DateUtils;
+
 import java.util.Date;
 import java.util.List;
 
@@ -11,10 +13,22 @@ public class Comment {
     private Integer commentId;//评论编号
     private String commentContent;//评论内容
     private Date commentTime;//评论时间
+    private String commentTimeStr;
     private  String commentUserName;//评论人
     private Integer commentStatus;//评论状态，1代表屏蔽，0代表解除
     private Integer articleId;//帖子编号
     private List<Reply> replies;//用于封装评论下的回复
+
+    public String getCommentTimeStr() {
+        if(commentTime!=null){
+            commentTimeStr = DateUtils.date2String(commentTime,"yyyy-MM-dd HH:mm:ss");
+        }
+        return commentTimeStr;
+    }
+
+    public void setCommentTimeStr(String commentTimeStr) {
+        this.commentTimeStr = commentTimeStr;
+    }
 
     public List<Reply> getReplies() {
         return replies;

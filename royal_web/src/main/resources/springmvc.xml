@@ -17,8 +17,8 @@
 
     <!--配置视图解析器-->
     <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/pages/"/>
-        <property name="suffix" value=".jsp"/>
+        <property name="prefix" value="/html/"/>
+        <property name="suffix" value=".html"/>
     </bean>
 
     <!-- 设置静态资源不过滤 这个简单 但是不灵活 -->
