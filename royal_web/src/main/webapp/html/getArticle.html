@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="../css/getArticle.css"/>
     <script type="text/javascript" src="../js/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="../js/hm-bbs.js"></script>
+
 </head>
 <body>
 <!-- 头部 -->
@@ -143,7 +144,7 @@
                                 </ul>
                             </div>
                             <span class="icon-feedback">
-                                <a href="javascript:;" onclick="showDialog(1)"> <i></i> 回复</a>
+                                <a href="javascript:;" onclick="showDialog(1,26)"> <i></i> 回复</a>
                             </span>
                         </div>
                     </div>
@@ -216,7 +217,7 @@
                                 </ul>
                             </div>
                             <span class="icon-feedback">
-                                <a href="javascript:;" onclick="showDialog(3)"> <i></i> 回复</a>
+                                <a href="javascript:;" onclick="showDialog(3,4)"> <i></i> 回复</a>
                             </span>
                         </div>
                     </div>
@@ -232,10 +233,11 @@
             <!-- 未登录时候显示 <div class="con">您没有登录论坛，请登录后再进行回复</div>-->
 
             <!-- 登录后显示评论输入框-->
-            <form action="#" method="post">
+            <form action="/comment/addComment.do" method="post" id="comment">
+                <input type="hidden" name="articleId" value="2">
                 <div class="con con-loged">
                     <div class="con-t">
-                        <textarea id="content" name="content" placeholder="请在此输入您要回复的信息"></textarea>
+                        <textarea id="content" name="commentContent" placeholder="请在此输入您要回复的信息"></textarea>
                     </div>
                     <div class="con-b">
                         <input type="submit" class="btn"/>
@@ -262,7 +264,8 @@
 
 
 <!-- 回复弹出框 -->
-<form action="" method="post">
+<form action="/reply/addReplyByCommentId.do" method="post">
+    <input type="hidden" name="commentId" id="commentId" value="">
     <div class="pop-box ft-box">
         <div class="mask"></div>
         <div class="win">
@@ -272,7 +275,7 @@
             </div>
             <div class="win_bd">
                 <div class="win_bd_b">
-                    <textarea id="replyContent" name="content" placeholder="回复内容限于40字以内"></textarea>
+                    <textarea id="replyContent" name="replyContent" placeholder="回复内容限于40字以内"></textarea>
                 </div>
             </div>
             <div class="win_ft">
@@ -296,9 +299,10 @@
 
 <script type="text/javascript">
 //弹出回复框
-function showDialog(num) {
+function showDialog(num,commentId) {
     $('.pop-box').css('display', 'block');
     $("#floorSpan").html(num);
+    $("#commentId").val(commentId)
 }
 </script>
 </html>
