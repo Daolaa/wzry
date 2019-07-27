@@ -17,7 +17,6 @@ public class ArticleController {
 
     @Autowired
     private ArticleService articleService;
-
     /**
      * 添加帖子
      * @param article
@@ -60,6 +59,14 @@ public class ArticleController {
     public List<Article> findByZoneId(String zoneId){
         int _id = Integer.parseInt(zoneId);
         return articleService.findByZoneId(_id);
+
+    /*
+        发帖数统计
+     */
+    @RequestMapping("/countArticle.do")
+    @ResponseBody
+    public List<Integer> countArticle(){
+        return articleService.countArticle();
 
     }
 }

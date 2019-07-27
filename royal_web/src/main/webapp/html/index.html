@@ -12,6 +12,18 @@
     <script src="/js/getParameter.js"></script>
     <script>
 
+        <!-- 统计帖子数-->
+        $(function () {
+            $.post("/article/countArticle.do","",function (data) {
+                $("#countToday").text(data[1]);
+                $("#countAll").text(data[0]);
+            });
+        })
+
+    </script>
+
+    <script>
+
         $(function () {
             //获取区域id
             var zoneId = getParameter("zoneId");
@@ -149,8 +161,8 @@
             <div class="hm-bbs-info-in l" style="margin-left:30px;">
                 <div class="t clearfix"><h2 class="l">王者荣耀</h2></div>
                 <p>
-                    <span>今日帖子<strong>99</strong></span>
-                    <span>全部帖子<strong>250</strong></span>
+                    <span>今日帖子<strong id="countToday"></strong></span>
+                    <span>全部帖子<strong id="countAll"></strong></span>
                 </p>
             </div>
             <div class="search-box l">
@@ -166,7 +178,7 @@
 
         <!-- 导航 -->
         <ul class="hm-bbs-nav border-lrb clearfix" id="navigation_ul">
-
+            <!--导航板块-->
         </ul>
 
 

@@ -1,7 +1,10 @@
 package com.bbs.dao;
 
 import com.bbs.domain.Article;
+
 import org.apache.ibatis.annotations.*;
+
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -38,5 +41,20 @@ public interface ArticleDao {
             "#{isTop},#{replyCount},#{upvoteCount},#{browseCount},#{zoneId},#{isReport})")
     @Options(useGeneratedKeys=true,keyColumn="articleId",keyProperty = "articleId")
     void save(Article article);
+
+    /**
+     * 查询所有帖子
+     * @return
+     */
+    @Select("select * from bbs_article_table")
+    List<Article> findAll();
+
+    /**
+     * 统计所有帖子
+     * @return
+     */
+    @Select("SELECT COUNT(1) FROM bbs_article_table")
+    Integer countArticle();
+
 
 }

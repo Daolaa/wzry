@@ -1,12 +1,13 @@
 package com.bbs.dao;
 
 import com.bbs.domain.Comment;
+
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
-
+import org.apache.ibatis.annotations.Insert;
 import java.util.List;
 
 @Repository
@@ -24,4 +25,9 @@ public interface CommentDao {
             many = @Many(select = "com.bbs.dao.ReplyDao.findByCommentId"))
     })
     List<Comment> findByArticleId(Integer articleId);
+
+
+    @Insert("insert into bbs_comment_table values(#{commentId},#{commentContent},#{commentTime},#{commentUserName},#{commentStatus},#{articleId})")
+    void AddComment(Comment comment);
+
 }
