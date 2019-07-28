@@ -17,15 +17,15 @@
         </div>
         <div class="hm-inner-r r">
             <div class="box">
-                <a href="javascript:;" id="login" class="to-login">游客登录</a>
-                <a href="">【新用户注册】</a>
+                <a href="/user/login;" id="login" class="to-login">游客登录</a>
+                <a href="/user/userregister.do">【新用户注册】</a>
                 <div id="dialogBg"></div>
                 <div id="dialog" class="animated">
                     <img class="dialogIco" width="50" height="40" src="../images/ico.png"/>
                     <div class="dialogTop" style="height:25px;">
                         <a href="javascript:;" class="closeDialogBtn">关闭</a>
                     </div>
-                    <form action="" method="post">
+                    <form action="#" method="post">
                         <ul class="editInfos">
                             <li>用户名：<input type="text" name="userName" class="ipt"/></li>
                             <li>密&nbsp;&nbsp;&nbsp;码：<input type="password" name="userPass" class="ipt"/></li>
@@ -38,7 +38,39 @@
     </div>
 </div>
 
+<script>
+    window.onload = exist();
 
+    function exist() {
+        var existname = $("#userName").val();
+        // alert(existname)
+        // $("#userName").next().remove();
+        if (existname == "" || existname == undefined) {
+            // var span = $("<span style='color: red'>账户不能为空</span>");
+            $("#userNameSpan").html("<span style='color: red'>账户不能为空</span>");
+            $("#sub").attr("disabled", true);
+            return false;
+        }
+        $.ajax({
+            url: "/user/exist",
+            type: "post",
+            data: {
+                "existname": existname
+            },
+            success: function (result) {
+                if (result == "ok") {//证明用户存在
+                    var span = $("<span style='color: red'>该账户已存在</span>")
+                    $("#usernameMsg").html(span);
+                    $("#sub").attr("disabled", true);
+                } else {
+                    var span = $("<span style='color: green'>该账户可以使用</span>")
+                    $("#usernameMsg").html(span);
+                    $("#sub").attr("disabled", false);
+                }
+            }
+        })
+    }
+</script>
 <div class="hm-header">
     <div class="hm-inner clearfix">
         <div class="hm-header-t clearfix">
@@ -65,16 +97,18 @@
         <div class="reg-box">
             <h2>用户注册<span>（红色型号代表必填）</span></h2>
             <div class="reg-info">
-                <form action="" method="post">
+                <form action="/user/regist" method="post">
                     <ul>
                         <li>
                             <div class="reg-l">
                                 <span class="red">*</span> 用户名：
                             </div>
                             <div class="reg-c">
-                                <input type="text" id="userName" name="userName" class="txt" value=""/>
+                                <input type="text" id="userName" name="userName" class="txt" value="" onblur="exist()"/>
+                                <br/>
+                                <p id="usernameMsg"></p>
                             </div>
-                            <span class="tips">用户名必须是由英文、数字、下划线组成</span>
+                            <span id="userNameSpan" class="tips">用户名必须是由英文、数字、下划线组成</span>
                         </li>
                         <li>
                             <div class="reg-l">
@@ -94,8 +128,7 @@
                         <li>
                             <div class="reg-l"></div>
                             <div class="reg-c">
-                                <input type="submit" class="submit-btn" value="注册"/><br/>
-                                <span style="color:red;">用户名已经存在！</span>
+                                <input type="submit" class="submit-btn" id="sub" value="注册"/><br/>
                             </div>
                         </li>
                     </ul>
@@ -104,8 +137,6 @@
         </div>
     </div>
 </div>
-
-
 
 
 <!-- 底部 -->
@@ -117,7 +148,6 @@
         </div>
     </div>
 </div>
-
 
 
 </body>
@@ -144,9 +174,9 @@
         //验证用户名;
         function checkUserName() {
             var userName = $("#userName").val();
-            var userName_Reg ="/^[a-zA-Z0-9_]+$/";
+            var userName_Reg = "/^[a-zA-Z0-9_]+$/";
             var boolean = userName_Reg.test(userName);
-            if (boolean){
+            if (boolean) {
                 alert(userName);
             }
         }
