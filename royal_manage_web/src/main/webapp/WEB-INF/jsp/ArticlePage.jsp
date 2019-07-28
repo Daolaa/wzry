@@ -78,7 +78,7 @@
                 <div style="clear:both"></div>
                 <hr>
                 <table class="table table-bordered table-hover">
-                    <thead>
+                    <thead >
                     <tr>
                         <th>标题</th>
                         <th>内容</th>
@@ -92,35 +92,37 @@
                     </tr>
                     </thead>
                     <tbody>
-                        
+                        <c:forEach items="${articleList}" var="article">
                             <tr>
-                                <td width="15%">标题</td>
-                                <td width="30%" class="line-limit-length">
-                                   
-                                </td>
-                                <td width="5%" class="line-limit-length">${article.sendername}</td>
-                                <td width="5%" class="line-limit-length">
-                                   
-                                </td>
-                                <td width="5%">
-                                   
-                                </td>
-                                <td width="5%">
-                                   
-                                </td>
-                                <td width="5%">
-                                   
-                                </td>
+                                <%--标题--%>
+                                <td width="15%">${article.title}</td>
+                                <%--内容--%>
+                                <td width="30%" class="line-limit-length">${article.content}</td>
+                                 <%--创贴人--%>
+                                <td width="5%" class="line-limit-length">${article.senderName}</td>
+                                 <%--是否置顶 0不置顶 1置顶--%>
+                                 <c:if test="${article.isTop==0}" >
+                                     <td width="6%" class="line-limit-length">否</td>
+                                 </c:if>
+                                 <c:if test="${article.isTop==1}" >
+                                    <td width="6%" class="line-limit-length">是</td>
+                                </c:if>
+                                 <%--回复数--%>
+                                <td width="5%">${article.comments.size()}</td>
+                                 <%--点赞数--%>
+                                <td width="5%"> ${article.upvoteCount}</td>
+                                 <%--浏览数--%>
+                                <td width="5%">${article.browseCount}</td>
+                                 <%--所在交流区--%>
+                                <td width="7%">${article.zoneId}</td>
+                                <%--操作--%>
                                 <td width="15%">
-                                    
-                                </td>
-                                <td width="15%">
-                                    <a href="/article/deleteArticle.do?id=${article.articleid}&pn=${articleMsgs.pageNum}&title=${articleSearch.title}&sendername=${articleSearch.sendername}" role="button" class="btn btn-primary">屏蔽</a>
-                                    <c:if test="${article.istop==0}">
-                                        <a href="/article/changeStatus.do?id=${article.articleid}&pn=${articleMsgs.pageNum}&title=${articleSearch.title}&sendername=${articleSearch.sendername}" role="button" class="btn btn-danger" >置顶</a>
+                                    <a href="/article/deleteArticle.do?id=${article.articleId}" role="button" class="btn btn-primary">屏蔽</a>
+                                    <c:if test="${article.isTop==0}">
+                                        <a href="/article/changeStatus.do?id=${article.articleId}" role="button" class="btn btn-danger" >置顶</a>
                                     </c:if>
-                                    <c:if test="${article.istop==1}">
-                                        <a href="/article/changeStatus.do?id=${article.articleid}&pn=${articleMsgs.pageNum}&title=${articleSearch.title}&sendername=${articleSearch.sendername}" role="button" class="btn btn-info" >取消</a>
+                                    <c:if test="${article.isTop==1}">
+                                        <a href="/article/changeStatus.do?id=${article.articleId}" role="button" class="btn btn-info" >取消</a>
                                     </c:if>
                                 </td>
                             </tr>
@@ -142,12 +144,12 @@
                     <nav aria-label="Page navigation">
                         <ul class="pagination">
                             <!--首页-->
-                            <li><a href="#" onclick="searchArticle(1)">首页</a></li>
+                            <li><a href="" onclick="searchArticle(1)">首页</a></li>
                             <!--上一页-->
                             <li>
                                 <c:if test="${articleMsgs.hasPreviousPage}">
                                         <a href="#" onclick="searchArticle('${articleMsgs.pageNum-1}')" aria-label="Previous">
-                                            <span aria-hidden="true">«</span>
+                                            <span aria-hidden="true"> « </span>
                                         </a>
                                 </c:if>
                             </li>
@@ -166,7 +168,7 @@
                                 <c:if test="${articleMsgs.hasNextPage}">
                                     <a href="javascript:void(0)" onclick="searchArticle('${articleMsgs.pageNum+1}')"
                                        aria-label="Next">
-                                        <span aria-hidden="true">»</span>
+                                        <span aria-hidden="true"> » </span>
                                     </a>
                                 </c:if>
                             </li>
@@ -183,6 +185,6 @@
 </div><!-- /.hrms_dept_container -->
 
 <%--<%@ include file="ArticleAdd.jsp"%>--%>
-<%@ include file="ArticleUpdate.jsp"%>
+<%--<%@ include file="ArticleUpdate.jsp"%>--%>
 </body>
 </html>

@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserDao {
     //登录
@@ -18,4 +20,7 @@ public interface UserDao {
     //查询
     @Select("select * from bbs_user_table where userName=#{username}")
     User findByUserName (String username);
+
+    @Select("select * from bbs_user_table")
+    List<User> findAll();
 }

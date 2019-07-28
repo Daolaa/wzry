@@ -165,13 +165,62 @@
                 </p>
             </div>
             <div class="search-box l">
-                <form action="javascript:;">
-                    <input type="text" class="txt l" placeholder="请输入关键字">
-                    <input type="button" value="搜索" class="btn l"/>
+                <form action="javascript:;" method="post" id="form_serch">
+                    <input type="text" name="sou" class="txt l" placeholder="请输入关键字" id="text1">
+                    <input type="submit" value="搜索" class="btn l"/>
                 </form>
             </div>
         </div>
 
+        <script>
+            $(function () {
+                $("#form_serch").submit(function () {
+                    $.post("/article/findByTitle",$("#form_serch").serialize(),function (data) {
+                        //获取ul
+                        var ul = $("#article_ul");
+                        ul.html(null);
+                        $(data).each(function () {
+                            if (this.isTop==1) {//创建li
+                                var li =
+                                    "<li class=\"clearfix ding\">\n" +
+                                    "<div class=\"hm-index-title\">\n" +
+                                    "<i class=\"set-to-top\">顶</i> <a href=\"getArticle.html\">"+this.title+"</a>\n" + "</div>\n" +
+                                    " <div class=\"hm-index-info l\">\n" +
+                                    "    <span class=\"article-username\">"+this.senderName+"</span>\n" +
+                                    "      <span class=\"post-time\">"+this.sendTimeStr+"</span>\n" +
+                                    "  </div>\n" +
+                                    "  <div class=\"hm-index-fun r\">\n" +
+                                    "      <span class=\"icon-like\"><i></i>"+ this.upvoteCount +"</span>\n" +
+                                    "  <span class=\"icon-talk\"><i></i>"+ this.replyCount+"</span>\n" +
+                                    "  </div>\n" +
+                                    "  </li>"
+                                //调用ul添加li
+                                ul.append(li);
+
+                            }else if (this.isTop==0) {
+                                //创建li
+                                var li =
+                                    "<li class=\"clearfix\">\n" +
+                                    "<div class=\"hm-index-title\">\n" +
+                                    "<i class=\"set-to-top\">顶</i> <a href=\"getArticle.html\">"+this.title+"</a>\n" + "</div>\n" +
+                                    " <div class=\"hm-index-info l\">\n" +
+                                    "    <span class=\"article-username\">"+this.senderName+"</span>\n" +
+                                    "      <span class=\"post-time\">"+this.sendTimeStr+"</span>\n" +
+                                    "  </div>\n" +
+                                    "  <div class=\"hm-index-fun r\">\n" +
+                                    "      <span class=\"icon-like\"><i></i>"+ this.upvoteCount +"</span>\n" +
+                                    "  <span class=\"icon-talk\"><i></i>"+ this.replyCount+"</span>\n" +
+                                    "  </div>\n" +
+                                    "  </li>"
+                                //调用ul添加li
+                                ul.append(li);
+                            }
+
+                        });
+                    },"json");
+                });
+            })
+        </script>
 
 
 
@@ -195,13 +244,41 @@
 
 
 
+
             <!-- 右侧侧边栏,在线用户 -->
             <div class="aside l">
                 <div class="aside-box">
                     <h3 class="t">
-                        <a href="javascript:;">在线用户(2)</a>
+                        <a href="javascript:;" id="loginUser"></a>
                     </h3>
-                    <ul class="b clearfix">
+                    <ul class="b clearfix" id="loginUserUl">
+
+                        <script>
+                            $(function () {
+                                $("#loginUser").click(function () {
+                                    $.get("/user/findAll",{},function (data) {
+                                        var ul = $("#loginUserUl");
+                                        ul.html(null);
+                                        var count= 0;
+                                        $(data).each(function () {
+                                            if (this.loginStatus ==1){
+                                                count  += 1;
+                                                var li =
+                                                        "<li>/n"+
+                                                        "<div><img src='"+this.picUrl+" '+ height='55'/> </div>\n"+
+                                                        "<p>"+this.userName+"</p>\n"+
+                                                        "</li>";
+
+                                                ul.append(li);
+                                            }
+
+                                        });
+                                        $("#loginUser").html("在线用户"+count);
+                                    });
+
+                                });
+                            });
+                        </script>
                         <li>
                             <div><img src="../images/default.png" height="55"/> </div>
                             <p>Mr.King</p>
@@ -210,6 +287,8 @@
                             <div><img src="../images/default.png" height="55"/></div>
                             <p>疯子</p>
                         </li>
+
+
                     </ul>
                 </div>
             </div>
@@ -292,4 +371,6 @@
           alert(data);
       })
   });
+
+
 </script>

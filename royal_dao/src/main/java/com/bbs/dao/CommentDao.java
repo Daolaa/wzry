@@ -30,4 +30,7 @@ public interface CommentDao {
     @Insert("insert into bbs_comment_table values(#{commentId},#{commentContent},#{commentTime},#{commentUserName},#{commentStatus},#{articleId})")
     void AddComment(Comment comment);
 
+
+//    @Select("select * from bbs_comment_table where articleId = #{articleId}")
+//    public List<Comment> findByArticleId(String articleId);
 }

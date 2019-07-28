@@ -85,4 +85,17 @@ public class Comment {
     public void setArticleId(Integer articleId) {
         this.articleId = articleId;
     }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "commentId=" + commentId +
+                ", commentContent='" + commentContent + '\'' +
+                ", commentTime=" + commentTime +
+                ", commentUserName='" + commentUserName + '\'' +
+                ", commentStatus=" + commentStatus +
+                ", articleId=" + articleId +
+                ", replies=" + replies +
+                '}';
+    }
 }

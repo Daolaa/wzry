@@ -82,6 +82,17 @@ public class Article {
         this.senderName = senderName;
     }
 
+   /* public String getSendTimeStr() {
+        if (sendTime!=null){
+            sendTimeStr= DateUtils.date2String(sendTime,"yyyy-MM-dd HH:mm");
+        }
+        return sendTimeStr;
+    }
+
+    public void setSendTimeStr(String sendTimeStr) {
+        this.sendTimeStr = sendTimeStr;
+    }*/
+
     public Integer getIsTop() {
         return isTop;
     }
@@ -128,5 +139,24 @@ public class Article {
 
     public void setIsReport(Integer isReport) {
         this.isReport = isReport;
+    }
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "articleId=" + articleId +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", sendTime=" + sendTime +
+                ", sendTimeStr='" + sendTimeStr + '\'' +
+                ", senderName='" + senderName + '\'' +
+                ", isTop=" + isTop +
+                ", replyCount=" + replyCount +
+                ", upvoteCount=" + upvoteCount +
+                ", browseCount=" + browseCount +
+                ", zoneId=" + zoneId +
+                ", isReport=" + isReport +
+                ", comments=" + comments +
+                '}';
     }
 }

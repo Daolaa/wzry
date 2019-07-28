@@ -2,7 +2,7 @@ package com.bbs.service;
 
 import com.bbs.domain.User;
 
-import java.security.PrivateKey;
+import java.util.List;
 
 public interface UserService {
     // 通过用户名及密码核查用户登录
@@ -12,5 +12,7 @@ public interface UserService {
 
     //增加用户
     User findUserByuserName (String username);
+
+    List<User> findAll();
 
 }

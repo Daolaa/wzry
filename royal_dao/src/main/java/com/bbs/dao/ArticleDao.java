@@ -5,6 +5,7 @@ import com.bbs.domain.Article;
 import org.apache.ibatis.annotations.*;
 
 import org.apache.ibatis.annotations.Select;
+import com.bbs.domain.Comment;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -57,4 +58,73 @@ public interface ArticleDao {
     Integer countArticle();
 
 
+
+    /**
+     * 根据帖子标题查询帖子
+     * @param title
+     * @return
+     */
+    @Select("select * from bbs_article_table where title like #{title}")
+    @Results({
+            @Result(id = true, property = "articleId", column = "articleId"),
+            @Result(property = "title", column = "title"),
+            @Result(property = "content", column = "content"),
+            @Result(property = "sendTime", column = "sendTime"),
+            @Result(property = "senderName", column = "senderName"),
+            @Result(property = "isTop", column = "isTop"),
+            @Result(property = "replyCount", column = "replyCount"),
+            @Result(property = "upvoteCount", column = "upvoteCount"),
+            @Result(property = "browseCount", column = "browseCount"),
+            @Result(property = "zoneId", column = "zoneId"),
+            @Result(property = "isReport", column = "isReport"),
+            @Result(property = "comments",column = "articleId",javaType = java.util.List.class,
+                    many = @Many(select = "com.bbs.dao.CommentDao.findByArticleId"))
+    })
+    public List<Article> findBYTitle(String title);
+
+    /**
+     * 查询全部帖子
+     * @return
+     */
+    @Select("select * from bbs_article_table")
+    @Results({
+            @Result(id = true, property = "articleId", column = "articleId"),
+            @Result(property = "title", column = "title"),
+            @Result(property = "content", column = "content"),
+            @Result(property = "sendTime", column = "sendTime"),
+            @Result(property = "senderName", column = "senderName"),
+            @Result(property = "isTop", column = "isTop"),
+            @Result(property = "replyCount", column = "replyCount"),
+            @Result(property = "upvoteCount", column = "upvoteCount"),
+            @Result(property = "browseCount", column = "browseCount"),
+            @Result(property = "zoneId", column = "zoneId"),
+            @Result(property = "isReport", column = "isReport"),
+            @Result(property = "comments",column = "articleId",javaType = java.util.List.class,
+                    many = @Many(select = "com.bbs.dao.CommentDao.findByArticleId"))
+    })
+    List<Article> finfAll();
+
+    /**
+     * 根据帖子id屏蔽帖子
+     * @param articleId
+     */
+    @Delete("delete from bbs_article_table where articleId = #{articleId}")
+    public void deleteByArticleId(Integer articleId);
+
+    /**
+     * 根据贴子ID修改置顶状态
+     * @param isTop
+     * @param articleId
+     * @return
+     */
+    @Update("update bbs_article_table isTop = #{isTop} where articleId = #{articleId}")
+    public void updateByArticleId(Integer isTop, Integer articleId);
+
+    /**
+     * 根据帖子id查询帖子信息
+     * @param articleId
+     * @return
+     */
+    @Select("select * from bbs_article_table where articleId= #{articleId}")
+    public Article findByArticle(Integer articleId);
 }

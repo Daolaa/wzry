@@ -70,4 +70,12 @@ public class ArticleController {
         return articleService.countArticle();
 
     }
+
+    @RequestMapping("/findByTitle")
+    @ResponseBody
+    public List<Article> findByTitle(HttpServletRequest request){
+        String title = request.getParameter("sou");
+        return articleService.findByTitle("%"+title+"%");
+    }
+
 }

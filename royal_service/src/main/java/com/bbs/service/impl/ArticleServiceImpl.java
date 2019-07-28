@@ -58,18 +58,45 @@ public class ArticleServiceImpl implements ArticleService {
         //获取今日发帖数
         int count = 0; //统计今日发帖数
 
-        String nowTime = DateUtils.date2String(new Date(),"yyyy-MM-dd");
+        String nowTime = DateUtils.date2String(new Date(), "yyyy-MM-dd");
 
         List<Article> articles = articleDao.findAll();
         for (Article article : articles) {
-            String sendTime = DateUtils.date2String(article.getSendTime(),"yyyy-MM-dd");
-            if (nowTime.equals(sendTime)){
+            String sendTime = DateUtils.date2String(article.getSendTime(), "yyyy-MM-dd");
+            if (nowTime.equals(sendTime)) {
                 count++;
             }
         }
 
         list.add(count);//添加今日发帖数
         return list;
+    }
 
+    @Override
+    public List<Article> findByTitle(String title) {
+        return articleDao.findBYTitle(title);
+    }
+
+    @Override
+    public List<Article> findAll() {
+        //就是此静态方法！ 必须写在调用dao层查询的语句上
+        //PageHelper.startPage(currentPage,rows);
+        List<Article> articleList = articleDao.finfAll();
+        return articleList;
+    }
+
+    @Override
+    public void deleteByArticleId(Integer articleId) {
+        articleDao.deleteByArticleId(articleId);
+    }
+
+    @Override
+    public void updateByArticleId(Integer isTop, Integer articleId) {
+        articleDao.updateByArticleId(isTop,articleId);
+    }
+
+    @Override
+    public Article findByArticle(Integer articleId) {
+        return articleDao.findByArticle(articleId);
     }
 }
