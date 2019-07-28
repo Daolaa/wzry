@@ -12,7 +12,7 @@
     <script src="/js/getParameter.js"></script>
     <script>
 
-        <!-- 统计帖子数-->
+        // 统计帖子数
         $(function () {
             $.post("/article/countArticle.do","",function (data) {
                 $("#countToday").text(data[1]);
@@ -62,7 +62,7 @@
                     if (ele.isTop == 1 && ele.isReport !=1) {
                         str += "<li class=\"clearfix ding\">\n" +
         "                        <div class=\"hm-index-title\">\n" +
-        "                            <i class=\"set-to-top\">顶</i> <a href=\"html/getArticle.html?articleId="+ele.articleId+"\">" + ele.title + "</a>\n" +
+        "                            <i class=\"set-to-top\">顶</i> <a href=\"/html/getArticle.html?articleId="+ele.articleId+"\">" + ele.title + "</a>\n" +
         "                        </div>\n" +
         "                        <div class=\"hm-index-con\">" + ele.content + "</div>\n" +
         "                        <div class=\"hm-index-info l\">\n" +
@@ -81,7 +81,7 @@
                     if (ele.isTop == 0 && ele.isReport !=1) {
                         str += "<li class=\"clearfix\">\n" +
                             "    <div class=\"hm-index-title\">\n" +
-                            "        <i class=\"set-to-top\">顶</i> <a href=\"html/getArticle.html?articleId="+ele.articleId+"\">" + ele.title + "</a>\n" +
+                            "        <i class=\"set-to-top\">顶</i> <a href=\"/html/getArticle.html?articleId="+ele.articleId+"\">" + ele.title + "</a>\n" +
                             "    </div>\n" +
                             "    <div class=\"hm-index-con\">" + ele.content + "</div>\n" +
                             "    <div class=\"hm-index-info l\">\n" +
@@ -101,9 +101,8 @@
             // 去那里查询该帖信息回显到页面
             $("#button").click(function () {
                 $.post("/article/save.do",$("#form").serialize(),function (data) {
-
                     var id = data;
-                    location.href = "html/getArticle.html?articleId="+id;
+                    location.href = "/html/getArticle.html?articleId="+id;
                 });
             });
 
@@ -129,7 +128,7 @@
                     <div class="dialogTop" style="height:25px;">
                         <a href="javascript:;" class="closeDialogBtn">关闭</a>
                     </div>
-                    <form action="user/login.do" >
+                    <form action="/user/login.do" >
                         <ul class="editInfos">
                             <li>用户名：<input type="text" id="userName" name="userName" class="ipt"/></li>
                             <li>密&nbsp;&nbsp;&nbsp;码：<input type="password" id="userPass" name="userPass" class="ipt"/></li>
@@ -366,7 +365,7 @@
       });
 
       //查询用户是否登录
-      $.post("user/findUser.do",{},function(data){
+      $.post("/user/findUser.do",{},function(data){
 
           alert(data);
       })

@@ -7,14 +7,14 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-co
         <package name="com.bbs.domain"></package>
     </typeAliases>
 
-    <!--<plugins>-->
-        <!--<plugin interceptor="com.github.pagehelper.PageInterceptor">-->
-            <!--&lt;!&ndash; config params as the following &ndash;&gt;-->
-            <!--&lt;!&ndash;<!–分页参数合理化  –>&ndash;&gt;-->
-            <!--<property name="reasonable" value="true"/>-->
-        <!--</plugin>-->
-    <!--</plugins>-->
-
+   <!-- <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            &lt;!&ndash; config params as the following &ndash;&gt;
+            &lt;!&ndash;<!–分页参数合理化  –>&ndash;&gt;
+            <property name="reasonable" value="true"/>
+        </plugin>
+    </plugins>
+-->
 
     <mappers>
         <package name="com/bbs/dao"></package>

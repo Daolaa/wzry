@@ -3,10 +3,13 @@ package com.bbs.service;
 
 import com.bbs.domain.Article;
 
+
+
 import java.util.List;
 
 public interface ArticleService {
 
+    public List<Article> findAll(Integer pageNum,Integer pageSize);
 
     public List<Article> findByZoneId(Integer id);
 
@@ -50,4 +53,9 @@ public interface ArticleService {
      */
     Article findByArticle(Integer articleId);
 
+    void changeStatus(Article article);
+
+    public void deleteArticle(Integer articleId);
+
+    public List<Article> findByCondition(Article article,Integer pageNum,Integer pageSize);
 }

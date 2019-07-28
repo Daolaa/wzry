@@ -26,6 +26,11 @@ public class ZoneServiceImpl implements ZoneService {
         return zoneDao.findAll();
     }
 
+    @Override
+    public String findZoneNameById(Integer id){
+        return zoneDao.findZoneNameById(id);
+    }
+
 
     /**
      * 同意申请添加版块到交流区

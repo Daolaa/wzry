@@ -26,4 +26,7 @@ public interface ZoneDao {
     @Insert("insert into bbs_zone_table(zoneName,isDef) values(#{zoneName},#{isDef})")
     public void saveZone(@Param("zoneName") String zoneName,@Param("isDef") Integer isDef);
 
+
+    @Select("select zoneName from bbs_zone_table where zoneId = #{id}")
+    String findZoneNameById(Integer id);
 }

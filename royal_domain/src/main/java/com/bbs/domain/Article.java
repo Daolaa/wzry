@@ -16,12 +16,38 @@ public class Article {
     private String sendTimeStr;
     private String senderName;//发送人姓名
     private Integer isTop;//是否置顶，如果是0，代表不置顶；如果是1，代表置顶；
+    private String isTopStr;
     private Integer replyCount;//评论数
     private Integer upvoteCount;//点赞数
     private Integer browseCount;//浏览数
     private Integer zoneId;//所在交流区
+    private String zoneName;
     private Integer isReport;//屏蔽状态 0是没有屏蔽 1是有屏蔽
     private List<Comment> comments;//用于封装帖子下的所有评论
+
+    public String getZoneName() {
+        return zoneName;
+    }
+
+    public void setZoneName(String zoneName) {
+        this.zoneName = zoneName;
+    }
+
+    public String getIsTopStr() {
+        if(isTop!=null){
+            if(isTop == 0) {
+                isTopStr = "否";
+            }
+            if(isTop == 1){
+                isTopStr = "是";
+            }
+        }
+        return isTopStr;
+    }
+
+    public void setIsTopStr(String isTopStr) {
+        this.isTopStr = isTopStr;
+    }
 
     public String getSendTimeStr() {
         if(sendTime!=null){

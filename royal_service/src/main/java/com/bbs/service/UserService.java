@@ -1,18 +1,32 @@
 package com.bbs.service;
 
 import com.bbs.domain.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserService {
-    // 通过用户名及密码核查用户登录
-    User login(String username, String password);
-    //用户注册
-    void userRegist(User user);
+public interface UserService extends UserDetailsService {
+    List<User> findByCondition(User user, Integer pageNum, Integer pageSize);
 
-    //增加用户
-    User findUserByuserName (String username);
+    void upgrade(Integer userId);
 
-    List<User> findAll();
+    void changeTalkStatus(User user);
+
+    void updateUserLoginStatus(User userInfo);
+
+    User findByUsername(String username);
+
+    //登录
+
+    public User login(String username, String password);
+
+    //注册
+    public void userRegist(User user);
+
+
+    public User findUserByuserName(String username);
+
+
+    public List<User> findAll();
 
 }

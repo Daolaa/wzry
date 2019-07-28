@@ -20,18 +20,19 @@
                     <h3 class="panel-title" style="text-align: center;">王者荣耀论坛管理后台</h3>
                 </div>
                 <div class="panel-body">
-                    <div id="errorMsg" class="alert alert-danger" ></div>
-                    <form action="/manage/login" role="form" method="post" id="login_form">
+                    <div id="errorMsg" class="alert alert-danger" >${errorMsg}</div>
+                    <form method="post" id="login_form" action="/login">
                         <fieldset>
                             <div class="form-group">
                                 <input class="form-control" placeholder="用户名" name="username" autofocus>
                             </div>
                             <div class="form-group">
-                                <input class="form-control" placeholder="密码" name="userpass" type="password">
+                                <input class="form-control" placeholder="密码" name="password" type="password">
                             </div>
                             <!-- Change this to a button or input when using this as a form -->
                             <!--<a href="javascript:void(0)" class="btn btn-lg btn-success btn-block" id='login_btn'>登录</a>-->
                             <input type="submit" id="btn_sub" class="btn btn-lg btn-success btn-block" value="登录">
+                            <br>
                         </fieldset>
                     </form>
 

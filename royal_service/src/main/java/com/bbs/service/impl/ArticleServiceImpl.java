@@ -4,9 +4,11 @@ import com.bbs.dao.ArticleDao;
 import com.bbs.domain.Article;
 import com.bbs.service.ArticleService;
 import com.bbs.utils.DateUtils;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +19,15 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private ArticleDao articleDao;
 
+    /**
+     * 在后台帖子管理中 查询所有帖子
+     * @return
+     */
+    @Override
+    public List<Article> findAll(Integer pageNum,Integer pageSize){
+        PageHelper.startPage(pageNum,pageSize);
+        return articleDao.findAll();
+    }
 
     /**
      * 通过区域id查找帖子
@@ -98,5 +109,34 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Article findByArticle(Integer articleId) {
         return articleDao.findByArticle(articleId);
+    }
+
+    /**
+     * 修改指定状态
+     * @param article
+     */
+    @Override
+    public void changeStatus(Article article) {
+        articleDao.changeStatus(article);
+    }
+
+    /**
+     * 删除帖子
+     * @param articleId
+     */
+    @Override
+    public void deleteArticle(Integer articleId){
+        articleDao.deleteArticle(articleId);
+    }
+
+    /**
+     * 根据条件查询
+     * @param article
+     * @return
+     */
+    @Override
+    public List<Article> findByCondition(Article article,Integer pageNum,Integer pageSize){
+        PageHelper.startPage(pageNum,pageSize);
+        return articleDao.findByCondition(article);
     }
 }

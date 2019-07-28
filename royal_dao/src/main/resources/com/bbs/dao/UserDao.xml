@@ -1,0 +1,44 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbs.dao.UserDao">
+
+    <select id="findByCondition" parameterType="user" resultType="user">
+        select * from bbs_user_table
+        <where>
+            <if test="userName!=null and userName!='' ">
+                and userName like #{userName}
+            </if>
+            <if test="role!=null and role!=0 ">
+                and role = #{role}
+            </if>
+        </where>
+    </select>
+
+    <update id="changeTalkStatus" parameterType="user">
+        update bbs_user_table
+        <set>
+            <if test="talkStatus == 0">
+                talkStatus = 1,
+            </if>
+            <if test="talkStatus == 1">
+                talkStatus = 0
+            </if>
+        </set>
+        where userId = #{userId}
+    </update>
+
+    <update id="updateUserLoginStatus" parameterType="user">
+        update bbs_user_table
+        <set>
+            <if test="loginStatus == 0">
+                loginStatus = 1,
+            </if>
+            <if test="loginStatus == 1">
+                loginStatus = 0
+            </if>
+        </set>
+        where userId = #{userId}
+    </update>
+
+</mapper>

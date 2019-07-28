@@ -8,6 +8,8 @@ public interface ZoneService {
 
     public List<Zone> findAll();
 
+    public String findZoneNameById(Integer id);
+
     /**
      * 同意申请添加版块到交流区
      * @param zoneName

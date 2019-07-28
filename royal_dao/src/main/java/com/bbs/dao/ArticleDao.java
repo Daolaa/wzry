@@ -1,17 +1,14 @@
 package com.bbs.dao;
 
 import com.bbs.domain.Article;
-
 import org.apache.ibatis.annotations.*;
-
-import org.apache.ibatis.annotations.Select;
-import com.bbs.domain.Comment;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface ArticleDao {
+
     /**
      * 通过区域id查找帖子
      * @param id
@@ -57,6 +54,11 @@ public interface ArticleDao {
     @Select("SELECT COUNT(1) FROM bbs_article_table")
     Integer countArticle();
 
+    /**
+     * 修改置顶状态
+     * @param article
+     */
+    void changeStatus(Article article);
 
 
     /**
@@ -127,4 +129,17 @@ public interface ArticleDao {
      */
     @Select("select * from bbs_article_table where articleId= #{articleId}")
     public Article findByArticle(Integer articleId);
+    /**
+     * 删除帖子
+     * @param articleId
+     */
+    @Delete("delete from bbs_article_table where articleId = #{articleId}")
+    void deleteArticle(Integer articleId);
+
+    /**
+     * 根据条件查询
+     * @param article
+     * @return
+     */
+    List<Article> findByCondition(Article article);
 }

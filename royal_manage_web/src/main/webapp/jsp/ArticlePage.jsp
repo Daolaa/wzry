@@ -22,6 +22,10 @@
 </style>
 <script>
 
+        function searchArticle(num,title,senderName){
+            location.href = "${pageContext.request.contextPath}/manage_Article/findByCondition.do?pageNum="+num+"&title="+title+"&senderName="+senderName;
+        }
+
 </script>
 <body>
 <div class="hrms_dept_container">
@@ -48,7 +52,7 @@
                 <!-- Table -->
                 <div>
                     <div style="float: left">
-                        <form method="get" id="articleSearchForm">
+                        <form method="post" action="${pageContext.request.contextPath}/manage_Article/findByCondition.do"  id="articleSearchForm" >
                             <table>
                                 <tr>
                                     <th>
@@ -57,17 +61,17 @@
                                     <th>
                                         <input type="text" id="title" class="form-control"
                                                name="title" value="">
-                                        <input type="hidden" id="pageNum" name="pn" value="">
+                                        <input type="hidden" id="pageNum" name="pageNum" value="${articleMsgs.pageNum}">
                                     </th>
                                     <th>
                                         <label for="article_sendername" class="control-label">创帖人:</label>
                                     </th>
                                     <th>
                                         <input type="text" id="article_sendername" class="form-control"
-                                               name="sendername" value="">
+                                               name="senderName" value="">
                                     </th>
                                     <th colspan="2">
-                                        <input type="button" value="查询" class="form-control btn-primary">
+                                        <input type="submit" value="查询" class="form-control btn-primary">
                                     </th>
                                 </tr>
                             </table>
@@ -92,38 +96,40 @@
                     </tr>
                     </thead>
                     <tbody>
-                        
+                        <c:forEach items="${articleMsgs.list}" var="article">
                             <tr>
-                                <td width="15%">标题</td>
+                                <td width="15%">${article.title}</td>
                                 <td width="30%" class="line-limit-length">
-                                   
+                                        ${article.content}
                                 </td>
-                                <td width="5%" class="line-limit-length">${article.sendername}</td>
+                                <td width="5%" class="line-limit-length">${article.senderName}</td>
                                 <td width="5%" class="line-limit-length">
-                                   
+                                        ${article.isTopStr}
                                 </td>
                                 <td width="5%">
-                                   
+                                        ${article.replyCount}
                                 </td>
                                 <td width="5%">
-                                   
+                                        ${article.upvoteCount}
                                 </td>
                                 <td width="5%">
-                                   
+                                        ${article.browseCount}
                                 </td>
                                 <td width="15%">
-                                    
+                                        ${article.zoneName}
                                 </td>
                                 <td width="15%">
-                                    <a href="/article/deleteArticle.do?id=${article.articleid}&pn=${articleMsgs.pageNum}&title=${articleSearch.title}&sendername=${articleSearch.sendername}" role="button" class="btn btn-primary">屏蔽</a>
-                                    <c:if test="${article.istop==0}">
-                                        <a href="/article/changeStatus.do?id=${article.articleid}&pn=${articleMsgs.pageNum}&title=${articleSearch.title}&sendername=${articleSearch.sendername}" role="button" class="btn btn-danger" >置顶</a>
+                                    <a href="${pageContext.request.contextPath}deleteArticle.do?articleId=${article.articleId}&pageNum=${articleMsgs.pageNum}&title=${conditionList[0]}&senderName=${conditionList[1]}" role="button" class="btn btn-primary">删除</a>
+                                    <c:if test="${article.isTop==0}">
+                                        <a href="${pageContext.request.contextPath}changeStatus.do?articleId=${article.articleId}&isTop=${article.isTop}&pageNum=${articleMsgs.pageNum}&title=${conditionList[0]}&senderName=${conditionList[1]}" role="button" class="btn btn-danger" >置顶</a>
                                     </c:if>
-                                    <c:if test="${article.istop==1}">
-                                        <a href="/article/changeStatus.do?id=${article.articleid}&pn=${articleMsgs.pageNum}&title=${articleSearch.title}&sendername=${articleSearch.sendername}" role="button" class="btn btn-info" >取消</a>
+                                    <c:if test="${article.isTop==1}">
+                                        <a href="${pageContext.request.contextPath}changeStatus.do?articleId=${article.articleId}&isTop=${article.isTop}&pageNum=${articleMsgs.pageNum}&title=${conditionList[0]}&senderName=${conditionList[1]}" role="button" class="btn btn-info" >取消</a>
+                                        <%--&pn=${articleMsgs.pageNum}&title=${article.title}&sendername=${article.senderName}--%>
                                     </c:if>
                                 </td>
                             </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
 
@@ -141,11 +147,11 @@
                     <nav aria-label="Page navigation">
                         <ul class="pagination">
                             <!--首页-->
-                            <li><a href="#" onclick="searchArticle(1)">首页</a></li>
+                            <li><a href="#" onclick="searchArticle(1,'${conditionList[0]}','${conditionList[1]}')">首页</a></li>
                             <!--上一页-->
                             <li>
                                 <c:if test="${articleMsgs.hasPreviousPage}">
-                                        <a href="#" onclick="searchArticle('${articleMsgs.pageNum-1}')" aria-label="Previous">
+                                        <a href="#" onclick="searchArticle('${articleMsgs.pageNum-1}','${conditionList[0]}','${conditionList[1]}')" aria-label="Previous">
                                             <span aria-hidden="true">«</span>
                                         </a>
                                 </c:if>
@@ -156,20 +162,20 @@
                                     <li class="active"><a href="#">${page_num}</a></li>
                                 </c:if>
                                 <c:if test="${page_num != articleMsgs.pageNum}">
-                                    <li><a href="#" onclick="searchArticle('${page_num}')">${page_num}</a></li>
+                                    <li><a href="#" onclick="searchArticle('${page_num}','${conditionList[0]}','${conditionList[1]}')">${page_num}</a></li>
                                 </c:if>
                             </c:forEach>
 
                             <!--下一页-->
                             <li>
                                 <c:if test="${articleMsgs.hasNextPage}">
-                                    <a href="javascript:void(0)" onclick="searchArticle('${articleMsgs.pageNum+1}')"
+                                    <a href="javascript:void(0)" onclick="searchArticle('${articleMsgs.pageNum+1}','${conditionList[0]}','${conditionList[1]}')"
                                        aria-label="Next">
                                         <span aria-hidden="true">»</span>
                                     </a>
                                 </c:if>
                             </li>
-                            <li><a href="javascript:void(0)" onclick="searchArticle('${articleMsgs.pages}')">尾页</a></li>
+                            <li><a href="javascript:void(0)" onclick="searchArticle('${articleMsgs.pages}','${conditionList[0]}','${conditionList[1]}')">尾页</a></li>
                         </ul>
                     </nav>
                 </div>

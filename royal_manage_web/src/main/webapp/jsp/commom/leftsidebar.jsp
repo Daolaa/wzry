@@ -7,7 +7,7 @@
                 <span class="glyphicon glyphicon-user" aria-hidden="true">用户管理</span>
             </a>
             <ul class="nav nav-pills nav-stacked">
-                <li role="presentation"><a href="/user/findByPage.do" >用户信息</a></li>
+                <li role="presentation"><a href="${pageContext.request.contextPath}/manage_User/findByCondition.do?pageNum=1" >用户信息</a></li>
             </ul>
             <ul class="nav nav-pills nav-stacked">
                 <li role="presentation"><a href="/zoneApply/findByZoneapp.do" >版块审核</a></li>
@@ -20,7 +20,7 @@
                 <span class="glyphicon glyphicon-cloud" aria-hidden="true">用户帖管理</span>
             </a>
             <ul class="nav nav-pills nav-stacked">
-                <li role="presentation"><a href="/article/findByPage.do" >帖子信息</a></li>
+                <li role="presentation"><a href="${pageContext.request.contextPath}/manage_Article/findByCondition.do?pageNum=1" >帖子信息</a></li>
             </ul>
             <ul class="nav nav-pills nav-stacked">
                 <li role="presentation"><a href="/word/findByPage.do" >敏感词汇管理</a></li>

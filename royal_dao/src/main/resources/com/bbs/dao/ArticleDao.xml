@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.bbs.dao.ArticleDao">
+    <update id="changeStatus" parameterType="article">
+        update bbs_article_table
+        <set>
+            <if test="isTop == 0">
+                isTop = 1,
+            </if>
+            <if test="isTop == 1">
+                isTop = 0
+            </if>
+        </set>
+          where articleId = #{articleId}
+    </update>
+    
+    <select id="findByCondition" parameterType="article" resultType="article">
+        select * from bbs_article_table
+        <where>
+            <if test="title!=null">
+                and title like #{title}
+            </if>
+            <if test="senderName!=null">
+                and senderName like #{senderName}
+            </if>
+        </where>
+    </select>
+</mapper>
