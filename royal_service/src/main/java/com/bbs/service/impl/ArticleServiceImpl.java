@@ -139,4 +139,10 @@ public class ArticleServiceImpl implements ArticleService {
         PageHelper.startPage(pageNum,pageSize);
         return articleDao.findByCondition(article);
     }
+
+    @Override
+    public int countArticleByuserName(String userName) {
+        return articleDao.countArticleByuserName(userName);
+
+    }
 }

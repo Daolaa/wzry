@@ -10,41 +10,44 @@
     <script type="text/javascript" src="../js/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="../js/hm-bbs.js"></script>
     <style type="text/css">
-        .hm-header-b { border-bottom: 1px solid #d9d9d9; }
+        .hm-header-b {
+            border-bottom: 1px solid #d9d9d9;
+        }
     </style>
 
     <!--加载页面用户信息-->
     <script>
         $(function () {
             //加载用户信息
-            $.post("/user/findUserById.do",{},function (data) {
+            $.post("/user/findUserById.do", {}, function (data) {
                 $("#username_form").val(data.userName);
                 $("#username_r").val(data.userName);
                 $("#userName_top").text(data.userName);
                 $("#username_l").text(data.userName);
-                $("#image").attr("src","../images/banner.jpg");
+                $("#image").attr("src", "../images/banner.jpg");
             });
         });
     </script>
 
-    <!--修改密码-->
+    <!--版块申请-->
     <script>
         $(function () {
             $("#button").click(function () {
-                $.post("/user/updataPsd.do",$("#form").serialize(),function (data) {
+                $.post("/zoneapply/addZoneapply.do",$("#form").serialize(),function (data) {
                     var flag = data;
                     if (flag){
-                        $("#Msg").text("修改成功");
+                        $("#Msg").text("申请成功,待审核")
                     }else {
-                        $("#Msg").text("旧密码错误");
+                        $("#Msg").text("版块已存在!!!")
                     }
-                });
+                })
             });
         })
     </script>
+
+
 </head>
 <body>
-
 
 <!-- 头部 -->
 <div class="hm-top-nav">
@@ -77,7 +80,6 @@
 </div>
 
 
-
 <!--头部信息-->
 <div class="hm-header">
     <div class="hm-inner clearfix">
@@ -94,7 +96,7 @@
         </div>
         <div class="hm-header-b">
             <i class="hm-ico-home"></i>
-            <a href="/user/index">首页</a><span>></span>修改密码
+            <a href="/user/index">首页</a><span>></span>开辟新版块
         </div>
     </div>
 </div>
@@ -112,7 +114,7 @@
                 </div>
                 <ul class="user-info-l-b">
                     <li><i class="info-icon"></i>我的资料</li>
-                    <li class="cur"><i class="safe-icon"></i>修改密码</li>
+                    <li><i class="safe-icon"></i>修改密码</li>
                 </ul>
             </div>
 
@@ -120,29 +122,28 @@
             <div class="user-info-r r">
                 <ul class="clearfix hd">
                     <li><a href="user_info.html">个人信息</a></li>
-                    <li class="cur"><a href="user_pwd.html">修改密码</a></li>
-                    <li><a href="user_update.html">申请高级用户</a></li>
+                    <li><a href="user_pwd.html">修改密码</a></li>
+                    <li class="cur"><a href="user_update.html">开辟新版块</a></li>
                 </ul>
                 <form action="#" method="post" id="form">
-                    <!--保存用户名-->
-                    <input type="hidden" name="username" id="username_form" value="">
-                <ul class="bd">
-                    <li class="clearfix">
-                        <div class="info-l"><i class="red">*</i>旧密码：</div>
-                        <div class="info-r"><input type="password" name="password" class="txt"/></div>
-                    </li>
-                    <li class="clearfix">
-                        <div class="info-l"><i class="red">*</i>新密码：</div>
-                        <div class="info-r"><input type="password" name="newPsd"class="txt"/></div>
-                    </li>
-                    <li class="clearfix">
-                        <div class="info-l"></div>
-                        <div class="info-r">
-                            <input type="button" class="btn" id="button" value="保存"/>
-                            <span style="color:red;" id="Msg"></span>
-                        </div>
-                    </li>
-                </ul>
+
+                    <ul class="bd">
+                        <li class="clearfix">
+                            <div class="info-l"><i></i>版块名称:</div>
+                            <div class="info-r"><input type="text" name="zoneName" class="txt"/></div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="info-l"><i></i>申请理由:</div>
+                            <div class="info-r"><textarea name="reason" class="txt" placeholder="请在此输入申请理由"></textarea></div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="info-l"></div>
+                            <div class="info-r">
+                                <input type="button" class="btn" id="button" value="申请"/>
+                                <span style="color:red;" id="Msg"></span>
+                            </div>
+                        </li>
+                    </ul>
                 </form>
 
             </div>

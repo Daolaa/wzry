@@ -19,6 +19,7 @@ public interface ArticleService {
 
     List<Integer> countArticle();
 
+    int countArticleByuserName(String userName);
     /**
      * 根据帖子标题查询帖子
      * @param title

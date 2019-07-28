@@ -33,4 +33,6 @@ public interface ReportService {
      * 驳回
      */
     public void deleteById(Integer id);
+
+    void addReport(Report report);
 }

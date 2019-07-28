@@ -16,4 +16,14 @@ public class CommentServiceImpl implements CommentService {
     public void addComment(Comment comment) {
         commentDao.AddComment(comment);
     }
+
+    /**
+     * 根据贴子ID 统计评论数
+     * @param articleId
+     * @return
+     */
+    @Override
+    public int countCommentById(int articleId) {
+        return commentDao.countCommentById(articleId);
+    }
 }

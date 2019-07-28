@@ -3,6 +3,7 @@ package com.bbs.dao;
 import com.bbs.domain.Article;
 import com.bbs.domain.Report;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
@@ -58,4 +59,11 @@ public interface ReportDao {
      */
     @Delete("delete from bbs_report_table where reportId = #{id}")
     public void deleteById(Integer id);
+
+    /**
+     * 添加举报
+     * @param report
+     */
+    @Insert("INSERT INTO bbs_report_table VALUES(#{reportId},#{reportContent},#{reportTime},#{reportUserName},#{reportStatus},#{articleId})")
+    void addReport(Report report);
 }

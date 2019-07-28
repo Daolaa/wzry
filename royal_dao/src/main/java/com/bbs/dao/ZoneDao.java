@@ -19,6 +19,14 @@ public interface ZoneDao {
     public List<Zone> findAll();
 
     /**
+     * 根据版块名查询版块
+     * @param zoneName
+     * @return
+     */
+    @Select("SELECT * FROM bbs_zone_table WHERE zoneName = #{zoneName}")
+    Zone findZoneByName(String zoneName);
+
+    /**
      * 同意申请添加版块到交流区
      * @param zoneName
      * @param isDef

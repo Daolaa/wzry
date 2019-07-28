@@ -1,7 +1,10 @@
 package com.bbs.dao;
 
 import com.bbs.domain.Article;
+
 import org.apache.ibatis.annotations.*;
+
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -54,6 +57,13 @@ public interface ArticleDao {
     @Select("SELECT COUNT(1) FROM bbs_article_table")
     Integer countArticle();
 
+    /**
+     * 统计用户发帖数
+     * @param userName
+     * @return
+     */
+    @Select("SELECT COUNT(1) FROM bbs_article_table where senderName = #{userName}")
+    int countArticleByuserName(String userName);
     /**
      * 修改置顶状态
      * @param article

@@ -2,14 +2,19 @@ package com.bbs.controller;
 
 import com.bbs.domain.User;
 import com.bbs.service.UserService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 import java.util.List;
 
 @Controller
@@ -120,4 +125,71 @@ public class UserController {
     public List<User> findAll(){
         return userService.findAll();
     }
+    /**
+     * 查询用户信息
+     * @return
+     */
+    @RequestMapping("/findUserById.do")
+    @ResponseBody
+    public  User findUserById(){
+        //可以在域中获取 不查了
+        User user = new User();
+        user.setUserName("admin");
+        return user;
+    }
+
+    /**
+     * 更新当前登录用户的邮箱或者头像
+     * @param email
+     * @param picUrl
+     * @return
+     */
+
+    @RequestMapping("/updataEmailAndPriURL.do")
+    public String updataEmailAndPriURL(String username, String email, MultipartFile picUrl, HttpServletRequest request) throws IOException {
+
+        //获取文件路径
+        String path = request.getSession().getServletContext().getRealPath("images");
+
+        //创建目录
+        File file = new File(path);
+        if(!file.exists()){
+            file.mkdirs();
+        }
+
+        //获取文件名
+        String picUrlName = picUrl.getOriginalFilename();
+        //弄一个唯一标识 uuid
+        String uuid = UUID.randomUUID().toString().replace("-", "").toUpperCase();
+        picUrlName = uuid+"_"+picUrlName;
+
+        //上传文件
+        picUrl.transferTo(new File(file,picUrlName));
+
+        String picUr = "/images/"+picUrlName;
+
+        userService.updataEmailAndPriURL(email,picUr,username);
+
+        return "redirect:/html/user_info.html";
+    }
+
+    /**
+     * 修改密码
+     * @param password
+     * @param newPsd
+     */
+    @RequestMapping("/updataPsd.do")
+    @ResponseBody
+    public boolean updataPsd(String username,String password,String newPsd){
+        return userService.updataPsd(username,password,newPsd);
+    }
+
+    @RequestMapping("/updataRole.do")
+    @ResponseBody
+    public boolean updataRole(String articleNum){
+        //写死了
+        String username = "admin";
+        return userService.updataRole(articleNum,username);
+    }
+
 }

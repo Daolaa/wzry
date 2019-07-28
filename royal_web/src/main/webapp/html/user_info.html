@@ -12,6 +12,19 @@
     <style type="text/css">
         .hm-header-b { border-bottom: 1px solid #d9d9d9; }
     </style>
+
+    <!--加载页面用户信息-->
+    <script>
+        $(function () {
+            //加载用户信息
+            $.post("/user/findUserById.do",{},function (data) {
+                $("#username_r").val(data.userName);
+                $("#userName_top").text(data.userName);
+                $("#username_l").text(data.userName);
+                $("#image").attr("src","../images/banner.jpg");
+            });
+        });
+    </script>
 </head>
 <body>
 
@@ -23,7 +36,7 @@
         </div>
         <div class="hm-inner-r r">
             <div class="box">
-                欢迎<a href="user_info.html" style="margin-right:0px;padding:0px 5px;color:blue;">${user.getuserName}</a>回来！
+                欢迎<a href="user_info.html" style="margin-right:0px;padding:0px 5px;color:blue;" id="userName_top"></a>回来！
                 <a href="#">【注销】</a>
                 <div id="dialogBg"></div>
                 <div id="dialog" class="animated">
@@ -79,8 +92,8 @@
             <!--左侧用户名，头像-->
             <div class="user-info-l l">
                 <div class="user-info-l-t">
-                    <img src="../images/default.png"/>
-                    <div class="username">张无忌</div>
+                    <img src="../images/default.png" id="image"/>
+                    <div class="username" id="username_l"></div>
                 </div>
                 <ul class="user-info-l-b">
                     <li class="cur"><i class="info-icon"></i>我的资料</li>
@@ -92,21 +105,21 @@
             <!--右侧用户信息-->
             <div class="user-info-r r">
                 <ul class="clearfix hd">
-                    <li class="cur"><a href="user_info.html">个人信息</a></li>
-                    <li><a href="user_pwd.html">修改密码</a></li>
-                    <li><a href="user_piece.html">开辟新板块</a></li>
+                    <li class="cur"><a href="/html/user_info.html">个人信息</a></li>
+                    <li><a href="/html/user_pwd.html">修改密码</a></li>
+                    <li><a href="/html/user_update.html">申请高级用户</a></li>
                 </ul>
 
 
-                <form action="#" method="post" enctype="multipart/form-data">
+                <form action="/user/updataEmailAndPriURL.do" method="post" enctype="multipart/form-data" id="form">
                     <ul class="bd">
                         <li class="clearfix">
                             <div class="info-l"><i class="red">*</i>用户名：</div>
-                            <div class="info-r"><input type="text" class="txt" value="" readonly="readonly"/></div>
+                            <div class="info-r"><input type="text" name="username" class="txt" value="" readonly="readonly" id="username_r"/></div>
                         </li>
                         <li class="clearfix">
                             <div class="info-l">邮箱地址：</div>
-                            <div class="info-r"><input type="text" name="email" class="txt" value=""/></div>
+                            <div class="info-r"><input type="text" name="email" class="txt"/></div>
                         </li>
                         <li class="clearfix">
                             <div class="info-l">上传头像：</div>
@@ -116,7 +129,7 @@
                             <div class="info-l"></div>
                             <div class="info-r">
                                 <input type="submit" class="btn" value="保存"/>
-                                <span style="color:red;">修改成功！</span>
+                                <span style="color:red;" id="Msg"></span>
                             </div>
                         </li>
                     </ul>

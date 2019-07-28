@@ -71,6 +71,18 @@ public class ArticleController {
 
     }
 
+    /**
+     * 统计用户发帖数
+     * @return
+     */
+    @RequestMapping("/countArticleByuserName.do")
+    @ResponseBody
+    public Integer countArticleByuserName(){
+        //用户名写死了
+        String userName = "admin";
+        return articleService.countArticleByuserName(userName);
+    }
+
     @RequestMapping("/findByTitle")
     @ResponseBody
     public List<Article> findByTitle(HttpServletRequest request){

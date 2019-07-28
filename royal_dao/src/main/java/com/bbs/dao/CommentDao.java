@@ -27,9 +27,20 @@ public interface CommentDao {
     List<Comment> findByArticleId(Integer articleId);
 
 
+    /**
+     * 添加评论
+     * @param comment
+     */
     @Insert("insert into bbs_comment_table values(#{commentId},#{commentContent},#{commentTime},#{commentUserName},#{commentStatus},#{articleId})")
     void AddComment(Comment comment);
 
+    /**
+     * 根据贴子ID 统计评论数
+     * @param articleId
+     * @return
+     */
+    @Select("SELECT COUNT(1) FROM bbs_comment_table WHERE articleId = #{articleId}")
+    int countCommentById(int articleId);
 
 //    @Select("select * from bbs_comment_table where articleId = #{articleId}")
 //    public List<Comment> findByArticleId(String articleId);

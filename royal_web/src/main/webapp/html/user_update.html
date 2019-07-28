@@ -13,12 +13,23 @@
         .hm-header-b { border-bottom: 1px solid #d9d9d9; }
     </style>
 
+    <!--自定义样式-->
+    <style>
+        .user-info-r .info-r2 {
+            width: 100px;
+            text-align: left;
+            line-height: 34px;
+            padding-right: 5px;
+            height: 34px;
+            float: left;
+        }
+    </style>
+
     <!--加载页面用户信息-->
     <script>
         $(function () {
             //加载用户信息
             $.post("/user/findUserById.do",{},function (data) {
-                $("#username_form").val(data.userName);
                 $("#username_r").val(data.userName);
                 $("#userName_top").text(data.userName);
                 $("#username_l").text(data.userName);
@@ -27,18 +38,27 @@
         });
     </script>
 
-    <!--修改密码-->
+    <!--查询用户发帖数-->
+    <script>
+        $(function () {
+            $.post("/article/countArticleByuserName.do",{},function (data) {
+                $("#count_article").val(data);//隐藏域
+                $("#count_s").text(data);//页面显示
+            });
+        });
+    </script>
+    <!-- 权限申请-->
     <script>
         $(function () {
             $("#button").click(function () {
-                $.post("/user/updataPsd.do",$("#form").serialize(),function (data) {
+                $.post("/user/updataRole.do",$("#form").serialize(),function (data) {
                     var flag = data;
                     if (flag){
-                        $("#Msg").text("修改成功");
+                        $("#msg").text("申请成功!");
                     }else {
-                        $("#Msg").text("旧密码错误");
+                        $("#msg").text("发帖数太少了!");
                     }
-                });
+                })
             });
         })
     </script>
@@ -61,7 +81,7 @@
                     <div class="dialogTop" style="height:25px;">
                         <a href="javascript:;" class="closeDialogBtn">关闭</a>
                     </div>
-                    <form action="/user/login" method="post">
+                    <form action="" method="post">
                         <ul class="editInfos">
                             <li>用户名：<input type="text" id="userName" name="userName"
                                            class="ipt"/></li>
@@ -83,7 +103,7 @@
     <div class="hm-inner clearfix">
         <div class="hm-header-t clearfix">
             <h1 class="logo l">
-                <a href="javascript:;"><img src="../images/logo.png" alt=""/></a>
+                <a href="javascript:;"><img src="../images/logo.png" height="64" width="168" alt=""/></a>
             </h1>
             <div class="search-box l">
                 <form action="javascript:;">
@@ -94,61 +114,73 @@
         </div>
         <div class="hm-header-b">
             <i class="hm-ico-home"></i>
-            <a href="/user/index">首页</a><span>></span>修改密码
+            <a href="index.html">首页</a><span>></span>申请高级权限
         </div>
     </div>
 </div>
 
 
-<!--修改密码-->
+
 <div class="hm-body hm-body-bgc">
     <div class="hm-inner">
         <div class="user-info clearfix">
             <div class="user-info-t" style="height:20px;"></div>
+
+            <!--左侧用户名，头像-->
             <div class="user-info-l l">
                 <div class="user-info-l-t">
-                    <img src="../images/default.png" alt="" id="image"/>
+                    <img src="../images/default.png" id="image"/>
                     <div class="username" id="username_l"></div>
                 </div>
                 <ul class="user-info-l-b">
                     <li><i class="info-icon"></i>我的资料</li>
-                    <li class="cur"><i class="safe-icon"></i>修改密码</li>
+                    <li><i class="safe-icon"></i>修改密码</li>
                 </ul>
             </div>
 
 
+            <!--右侧用户信息-->
             <div class="user-info-r r">
                 <ul class="clearfix hd">
                     <li><a href="user_info.html">个人信息</a></li>
-                    <li class="cur"><a href="user_pwd.html">修改密码</a></li>
-                    <li><a href="user_update.html">申请高级用户</a></li>
+                    <li><a href="user_pwd.html">修改密码</a></li>
+                    <li class="cur"><a href="user_update.html">申请高级用户</a></li>
                 </ul>
+
+
                 <form action="#" method="post" id="form">
-                    <!--保存用户名-->
-                    <input type="hidden" name="username" id="username_form" value="">
-                <ul class="bd">
-                    <li class="clearfix">
-                        <div class="info-l"><i class="red">*</i>旧密码：</div>
-                        <div class="info-r"><input type="password" name="password" class="txt"/></div>
-                    </li>
-                    <li class="clearfix">
-                        <div class="info-l"><i class="red">*</i>新密码：</div>
-                        <div class="info-r"><input type="password" name="newPsd"class="txt"/></div>
-                    </li>
-                    <li class="clearfix">
-                        <div class="info-l"></div>
-                        <div class="info-r">
-                            <input type="button" class="btn" id="button" value="保存"/>
-                            <span style="color:red;" id="Msg"></span>
-                        </div>
-                    </li>
-                </ul>
+                    <ul class="bd">
+                        <li class="clearfix">
+                            <div class="info-l"><i class="red">高级特权:</i></div>
+                            <div class="info-r2"><i>开辟新版块</i></div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="info-l"><i class="red">申请条件:</i></div>
+                            <div class="info-r2 "><span>发帖数≥5</span></div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="info-l"><i class="red">当前发帖数:</i></div>
+                            <div class="info-r2"><span id="count_s">0</span></div>
+                            <input type="hidden" name="articleNum" id="count_article" value="">
+                        </li>
+                        <li class="clearfix">
+                            <div class="info-l"></div>
+                            <div class="info-r">
+                                <input type="button" class="btn" id="button" value="申请"/>
+                                <span style="color:red;" id="msg"></span>
+                            </div>
+                        </li>
+                    </ul>
                 </form>
 
+
             </div>
+
+
         </div>
     </div>
 </div>
+
 
 <!-- 底部 -->
 <div class="hm-footer" style="padding-top:10px;">
@@ -159,5 +191,8 @@
         </div>
     </div>
 </div>
+
+
+
 </body>
 </html>

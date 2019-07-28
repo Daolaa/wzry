@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
@@ -87,5 +88,38 @@ public class UserServiceImpl implements UserService {
 
         return user;
 
+    }
+
+    @Override
+    public void updataEmailAndPriURL(String email, String picUrl,String username) {
+        if (email != null && email.length()>0){
+            userDao.updataEmail(email,username);
+        }
+        if (picUrl != null && picUrl.length()>0){
+            userDao.updataPriURL(picUrl,username);
+        }
+
+    }
+
+    @Override
+    public boolean updataPsd(String username, String password, String newPsd) {
+        User user = userDao.findByUserName(username);
+        if (user !=null && password.equals(user.getUserPass())){
+            //修改密码
+            userDao.updataPsd(username,newPsd);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean updataRole(String articleNum,String userName) {
+
+        if (Integer.parseInt(articleNum) >= 5){
+            String role = "2";
+            userDao.updataRole(userName, role);
+            return true;
+        }
+        return false;
     }
 }

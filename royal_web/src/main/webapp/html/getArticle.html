@@ -12,13 +12,39 @@
     <script type="text/javascript" src="../js/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="../js/hm-bbs.js"></script>
     <script src="/js/getParameter.js"></script>
+    <!--点赞 评论 举报位置控制-->
+    <style>
+        #scomment {
+            right: 60px;
+        }
+
+        #upvote_css{
+            right: 110px;
+        }
+    </style>
+
     <script>
         var articleId = getParameter("articleId");
+        var flag = 0; // 用于记录点赞状态 0:未点赞 1:已点赞
         $(function () {
             //给评论框添加 articleId
             $("#articleId_comment").val(articleId);
+            //给回复评论框添加 articleId
             $("#reply_articleId").val(articleId);
+            //给举报框添加 articleId
+            $("#articleId_report").val(articleId);
 
+            //获取贴子点赞总数
+            $.post("/upvote/countUpvoteById.do", {"articleId": articleId}, function (data) {
+                $("#countUpvote").html("<i></i>" + data);
+            });
+
+            //获取贴子评论总数
+            $.post("/comment/countCommentById.do", {"articleId": articleId}, function (data) {
+                $("#countComment").html("<i></i>" + data);
+            });
+
+            //帖子内容及评论展示
             $.post("/article/findByArticleId.do", {"articleId": articleId}, function (data) {
                 var titleStr = "<h2 class=\"l\">" + data.title + "</h2>\n" +
                     "                    <div class=\"hm-detail-fun l\">\n" +
@@ -49,14 +75,17 @@
                     "                            </div>\n" +
                     "                            <div class=\"floor-ans\"></div>\n" +
                     "                        </div>\n" +
-                    "                        <span class=\"icon-comment\"><a href=\"#comment\"> <i></i> 评论</a></span>\n" +
+                    "                        <div id='add_upvote'>\n" +
+                    "                        </div>\n" +
+                    "                        <span class=\"icon-comment\" id='scomment'><a href=\"#comment\"> <i></i> 评论</a></span>\n" +
+                    "                        <span class=\"icon-comment\"><a href=\"#comment\" onclick=\"showReport()\"> <i></i> 举报</a></span>\n" +
                     "                    </div>" +
                     "</li>";
 
                 //评论
                 if (data.comments != null) {
                     $.each(data.comments, function (index, comment) {
-                        if(comment.commentStatus != 1) {
+                        if (comment.commentStatus != 1) {
                             articleStr += "<li class=\"floor clearfix\">\n" +
                                 "                    <div class=\"floorer-info l\">\n" +
                                 "                        <div class=\"floorer-photo\"><img src=\"../images/default.png\"/></div>\n" +
@@ -101,10 +130,43 @@
                 }
 
                 $("#article_ul").html(articleStr);
-            })
 
+                //贴子内容加载完成后查询当前用户是否点赞
+                $.post("/upvote/isUpvote.do",{"articleId": articleId},function (data) {
+                    flag = data;
+                    if (flag == 1){//已经点赞
+                        $("#add_upvote").prepend(
+                            "<span class=\"icon-feedback\" id='upvote_css'><a href=\"javascript:;\" onclick=\"isUpvote()\"> <i></i> 已赞</a></span>")
+                    }else {
+                        $("#add_upvote").prepend(
+                            "<span class=\"icon-feedback\" id='upvote_css'><a href=\"javascript:;\" onclick=\"isUpvote()\"> <i></i> 点赞</a></span>")
+                    }
+                });
+            });
+        });
 
-        })
+        //修改点赞状态
+        function isUpvote() {
+            if(flag == 1){
+                $("#add_upvote").empty();
+                $("#add_upvote").prepend(
+                    "<span class=\"icon-feedback\" id='upvote_css'><a href=\"javascript:;\" onclick=\"isUpvote()\"> <i></i> 点赞</a></span>")
+                flag = 0;
+            }else if(flag == 0){
+                $("#add_upvote").empty();
+                $("#add_upvote").prepend(
+                    "<span class=\"icon-feedback\" id='upvote_css'><a href=\"javascript:;\" onclick=\"isUpvote()\"> <i></i> 已赞</a></span>")
+                flag = 1;
+            }
+            //修改数据库
+            $.post("/upvote/addUpvote.do",{"upvoteArticleId": articleId},function (data){
+                //获取贴子点赞总数
+                $.post("/upvote/countUpvoteById.do", {"articleId": articleId}, function (data) {
+                    $("#countUpvote").html("<i></i>" + data);
+                });
+            });
+        }
+
     </script>
 
 </head>
@@ -153,10 +215,10 @@
                     <h2 class="l">求官方出艾琳英雄活动</h2>
                     <div class="hm-detail-fun l">
 					     <span class="icon-like">
-					         <a href="#"><i></i>3</a>
+					         <a href="#" id="countUpvote"><i></i></a>
 					     </span>
-                        <span class="icon-talk">
-						     <i></i>10
+                        <span class="icon-talk" id="countComment">
+						     <i></i>
 						</span>
                     </div>
                 </div>
@@ -228,7 +290,7 @@
 <form action="/reply/addReplyByCommentId.do" method="post">
     <input type="hidden" name="commentId" id="commentId" value="">
     <input type="hidden" name="articleId" value="" id="reply_articleId"/>
-    <div class="pop-box ft-box">
+    <div class="pop-box ft-box" id="commentBox">
         <div class="mask"></div>
         <div class="win">
             <div class="win_hd">
@@ -249,6 +311,31 @@
     </div>
 </form>
 
+<!-- 举报弹出框 -->
+<form id="form" action="/report/addReport.do" method="post">
+    <div class="pop-box ft-box " id="report">
+        <div class="mask"></div>
+        <div class="win">
+            <div class="win_hd">
+                <h4 class="l">举报本贴</h4><span class="close r">&times;</span>
+            </div>
+            <div class="win_bd">
+                <div class="win_bd_t"></div>
+                <div class="win_bd_b">
+                    <textarea id="reportContent" name="reportContent" placeholder="正文"></textarea>
+                </div>
+                <!--这里是一个隐藏域 为的是提交的贴子的id -->
+                <input id="articleId_report" type="hidden" name="articleId"/>
+            </div>
+            <div class="win_ft">
+                <div class="win_ft_in">
+                    <input type="submit" class="btn" value="举报"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
 
 <div class="fixedBar" id="j_fixedBar">
     <a href="#comment" class="newTopic"><span></span>回复</a>
@@ -260,10 +347,16 @@
 
 <script type="text/javascript">
     //弹出回复框
-    function showDialog(num,commentId) {
-        $('.pop-box').css('display', 'block');
+    function showDialog(num, commentId) {
+        $("#commentBox").css('display', 'block');
         $("#floorSpan").html(num);
         $("#commentId").val(commentId);
     }
+
+    //弹出举报框
+    function showReport(articleId) {
+        $('#report').css('display', 'block');
+    }
+
 </script>
 </html>

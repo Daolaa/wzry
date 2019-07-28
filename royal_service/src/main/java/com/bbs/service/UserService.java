@@ -29,4 +29,9 @@ public interface UserService extends UserDetailsService {
 
     public List<User> findAll();
 
+    void updataEmailAndPriURL(String email,String picUrl,String username);
+
+    boolean updataPsd(String username, String password, String newPsd);
+
+    boolean updataRole(String articleNum,String userName);
 }

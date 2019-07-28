@@ -5,6 +5,7 @@ import com.bbs.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 
@@ -31,4 +32,16 @@ public class CommentController {
         Integer articleId = comment.getArticleId();
         return "redirect:/html/getArticle.html?articleId="+articleId;
     }
+
+    /**
+     * 根据贴子ID 统计评论数
+     * @param articleId
+     * @return
+     */
+    @RequestMapping("/countCommentById.do")
+    @ResponseBody
+    public int countCommentById(String articleId){
+        return commentService.countCommentById(Integer.parseInt(articleId));
+    }
+
 }

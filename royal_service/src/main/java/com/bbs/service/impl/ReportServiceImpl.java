@@ -60,5 +60,12 @@ public class ReportServiceImpl implements ReportService {
         reportDao.deleteById(id);
     }
 
-
+    /**
+     * 添加举报
+     * @param report
+     */
+    @Override
+    public void addReport(Report report) {
+        reportDao.addReport(report);
+    }
 }
