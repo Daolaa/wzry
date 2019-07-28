@@ -10,7 +10,7 @@
                 <li role="presentation"><a href="/user/findByPage.do" >用户信息</a></li>
             </ul>
             <ul class="nav nav-pills nav-stacked">
-                <li role="presentation"><a href="/zoneApply/findByPage.do" >版块审核</a></li>
+                <li role="presentation"><a href="/zoneApply/findByZoneapp.do" >版块审核</a></li>
             </ul>
         </li>
     </ul>
@@ -26,7 +26,7 @@
                 <li role="presentation"><a href="/word/findByPage.do" >敏感词汇管理</a></li>
             </ul>
             <ul class="nav nav-pills nav-stacked">
-                <li role="presentation"><a href="/report/findByPage.do" >审批举报</a></li>
+                <li role="presentation"><a href="/report/findByReport.do" >审批举报</a></li>
             </ul>
         </li>
     </ul>
