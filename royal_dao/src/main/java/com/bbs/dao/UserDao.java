@@ -86,8 +86,8 @@ public interface UserDao {
      * 修改角色
      * @param userName
      */
-    @Select("UPDATE  bbs_user_table SET role = #{role} WHERE userName = #{username}")
-    void updataRole(@Param("username") String userName,@Param("role")String role);
+    @Select("UPDATE  bbs_user_table SET isupdating = #{isupdating} WHERE userName = #{username}")
+    void updataRole(@Param("username") String userName,@Param("isupdating")String isupdating);
 
 
 }

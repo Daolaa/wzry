@@ -116,8 +116,8 @@ public class UserServiceImpl implements UserService {
     public boolean updataRole(String articleNum,String userName) {
 
         if (Integer.parseInt(articleNum) >= 5){
-            String role = "2";
-            userDao.updataRole(userName, role);
+            String isupdating = "1";
+            userDao.updataRole(userName, isupdating);
             return true;
         }
         return false;

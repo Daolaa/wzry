@@ -22,7 +22,15 @@
                 $("#username_r").val(data.userName);
                 $("#userName_top").text(data.userName);
                 $("#username_l").text(data.userName);
-                $("#image").attr("src","../images/banner.jpg");
+                $("#image").attr("src",data.picUrl);
+                if (data.role == 1) {
+                    var li = "<li><a href=\"/html/user_update.html\">申请高级用户</a></li>"
+                    $("#user-r").append(li)
+                }if (data.role == 2) {
+                    var li = "<li><a href=\"/html/user_newzone.html\">开辟新版块</a></li>"
+                    $("#user-r").append(li)
+                }
+
             });
         });
     </script>
@@ -54,7 +62,7 @@
         <div class="hm-inner-r r">
             <div class="box">
                 欢迎<a href="user_info.html" style="margin-right:0px;padding:0px 5px;color:blue;" id="userName_top"></a>回来！
-                <a href="#">【注销】</a>
+                <a href="/user/loginOut.do">【注销】</a>
                 <div id="dialogBg"></div>
                 <div id="dialog" class="animated">
                     <img class="dialogIco" width="50" height="40" src="../images/ico.png"/>
@@ -118,10 +126,9 @@
 
 
             <div class="user-info-r r">
-                <ul class="clearfix hd">
+                <ul class="clearfix hd" id="user-r">
                     <li><a href="user_info.html">个人信息</a></li>
                     <li class="cur"><a href="user_pwd.html">修改密码</a></li>
-                    <li><a href="user_update.html">申请高级用户</a></li>
                 </ul>
                 <form action="#" method="post" id="form">
                     <!--保存用户名-->

@@ -18,7 +18,7 @@
             right: 60px;
         }
 
-        #upvote_css{
+        #upvote_css, #l {
             right: 110px;
         }
     </style>
@@ -26,6 +26,22 @@
     <script>
         var articleId = getParameter("articleId");
         var flag = 0; // 用于记录点赞状态 0:未点赞 1:已点赞
+        var islogin = false; // 用于记录登录状态;
+
+        //加载用户信息
+        $(function () {
+            //加载用户信息
+            $.post("/user/findUserById.do", {}, function (data) {
+                if (data.userName != undefined && data.roleStr != undefined) {
+                    $("#userName_top").text(data.userName);
+                    $("#image").attr("src", data.picUrl);
+                    // $("#comment_form").css("visibility", "visible");
+                    // $("#showComment").css("visibility", "visible");
+                }
+            });
+        });
+
+        //帖子内容相关
         $(function () {
             //给评论框添加 articleId
             $("#articleId_comment").val(articleId);
@@ -61,7 +77,7 @@
                 //原来帖楼
                 var articleStr = "<li class=\"floor clearfix\">" +
                     "           <div class=\"floorer-info l\">\n" +
-                    "                        <div class=\"floorer-photo\"><img src=\"../images/default.png\"/></div>\n" +
+                    "                        <div class=\"floorer-photo\"><img src='"+此处需要获取用户+"'/></div>\n" +
                     "                        <div class=\"floorer-name\">" + data.senderName + "</div>\n" +
                     "                    </div>\n" +
                     "                    <div class=\"floor-con l\">\n" +
@@ -132,12 +148,12 @@
                 $("#article_ul").html(articleStr);
 
                 //贴子内容加载完成后查询当前用户是否点赞
-                $.post("/upvote/isUpvote.do",{"articleId": articleId},function (data) {
+                $.post("/upvote/isUpvote.do", {"articleId": articleId}, function (data) {
                     flag = data;
-                    if (flag == 1){//已经点赞
+                    if (flag == 1) {//已经点赞
                         $("#add_upvote").prepend(
                             "<span class=\"icon-feedback\" id='upvote_css'><a href=\"javascript:;\" onclick=\"isUpvote()\"> <i></i> 已赞</a></span>")
-                    }else {
+                    } else {
                         $("#add_upvote").prepend(
                             "<span class=\"icon-feedback\" id='upvote_css'><a href=\"javascript:;\" onclick=\"isUpvote()\"> <i></i> 点赞</a></span>")
                     }
@@ -147,19 +163,19 @@
 
         //修改点赞状态
         function isUpvote() {
-            if(flag == 1){
+            if (flag == 1) {
                 $("#add_upvote").empty();
                 $("#add_upvote").prepend(
-                    "<span class=\"icon-feedback\" id='upvote_css'><a href=\"javascript:;\" onclick=\"isUpvote()\"> <i></i> 点赞</a></span>")
+                    "<span class=\"icon-feedback\" id='l'><a href=\"javascript:;\" onclick=\"isUpvote()\"> <i></i> 点赞</a></span>")
                 flag = 0;
-            }else if(flag == 0){
+            } else if (flag == 0) {
                 $("#add_upvote").empty();
                 $("#add_upvote").prepend(
                     "<span class=\"icon-feedback\" id='upvote_css'><a href=\"javascript:;\" onclick=\"isUpvote()\"> <i></i> 已赞</a></span>")
                 flag = 1;
             }
             //修改数据库
-            $.post("/upvote/addUpvote.do",{"upvoteArticleId": articleId},function (data){
+            $.post("/upvote/addUpvote.do", {"upvoteArticleId": articleId}, function (data) {
                 //获取贴子点赞总数
                 $.post("/upvote/countUpvoteById.do", {"articleId": articleId}, function (data) {
                     $("#countUpvote").html("<i></i>" + data);
@@ -178,11 +194,11 @@
         </div>
         <div class="hm-inner-r r">
             <div class="box">
-                欢迎<a href="user_info.html" style="margin-right:0px;padding:0px 5px;color:blue;"></a>回来！
+                欢迎<a href="user_info.html" style="margin-right:0px;padding:0px 5px;color:blue;" id="userName_top"></a>回来！
                 <a href="#">【注销】</a>
                 <div id="dialogBg"></div>
                 <div id="dialog" class="animated">
-                    <img class="dialogIco" width="50" height="40" src="../images/ico.png"/>
+                    <img class="dialogIco" width="50" height="40" src="" id="image"/>
                     <div class="dialogTop" style="height:25px;">
                         <a href="javascript:;" class="closeDialogBtn">关闭</a>
                     </div>
@@ -250,9 +266,8 @@
                 <!--帖子详情 包括 评论和回复-->
             </ul>
         </div>
-
         <!--发表评论-->
-        <div class="detail-to-comment">
+        <div class="detail-to-comment" id="comment_form" >
             <div class="tit"><a name="comment">发表评论</a></div>
             <!-- 未登录时候显示 <div class="con">您没有登录论坛，请登录后再进行回复</div>-->
 
@@ -269,7 +284,6 @@
                     </div>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
@@ -338,7 +352,9 @@
 
 
 <div class="fixedBar" id="j_fixedBar">
-    <a href="#comment" class="newTopic"><span></span>回复</a>
+    <div id="showComment">
+        <a href="#comment" class="newTopic"><span></span>回复</a>
+    </div>
     <a href="#" class="goTop"><i></i><span>返回<br/>顶部</span></a>
 </div>
 

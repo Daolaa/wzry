@@ -33,7 +33,7 @@
                 $("#username_r").val(data.userName);
                 $("#userName_top").text(data.userName);
                 $("#username_l").text(data.userName);
-                $("#image").attr("src","../images/banner.jpg");
+                $("#image").attr("src",data.picUrl);
             });
         });
     </script>
@@ -74,7 +74,7 @@
         <div class="hm-inner-r r">
             <div class="box">
                 欢迎<a href="user_info.html" style="margin-right:0px;padding:0px 5px;color:blue;" id="userName_top"></a>回来！
-                <a href="#">【注销】</a>
+                <a href="/user/loginOut.do">【注销】</a>
                 <div id="dialogBg"></div>
                 <div id="dialog" class="animated">
                     <img class="dialogIco" width="50" height="40" src="../images/ico.png"/>

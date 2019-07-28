@@ -41,16 +41,22 @@
 <script>
     window.onload = exist();
 
+    //校验帐号
     function exist() {
         var existname = $("#userName").val();
         // alert(existname)
         // $("#userName").next().remove();
+
         if (existname == "" || existname == undefined) {
             // var span = $("<span style='color: red'>账户不能为空</span>");
             $("#userNameSpan").html("<span style='color: red'>账户不能为空</span>");
             $("#sub").attr("disabled", true);
             return false;
+        }else {
+            $("#userNameSpan").html("<span class=\"tips\">用户名必须是由英文、数字、下划线组成</span>");
+            $("#sub").attr("disabled", false);
         }
+
         $.ajax({
             url: "/user/exist",
             type: "post",
@@ -69,6 +75,32 @@
                 }
             }
         })
+    }
+    //校验密码
+    function existPass() {
+        var existpass = $("#userPass").val();
+        var patrnPass=/^(\w){6,20}$/;
+        if (!patrnPass.exec(existpass)){
+            var span = $("<span style='color: red'>密码格式错误</span>");
+            $("#passMsg").html(span);
+            $("#sub").attr("disabled", true);
+        }else {
+            $("#passMsg").html("");
+            $("#sub").attr("disabled", false);
+        }
+    }
+
+    //校验邮箱
+    function existemail() {
+        var existemail = $("#email").val();
+        var patrnemail=/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+        if (!patrnemail.exec(existemail)){
+            $("#emailMsg").html("邮箱格式错误");
+            $("#sub").attr("disabled", true);
+        }else {
+            $("#emailMsg").html("");
+            $("#sub").attr("disabled", false);
+        }
     }
 </script>
 <div class="hm-header">
@@ -115,15 +147,18 @@
                                 <span class="red">*</span> 密&nbsp;&nbsp;&nbsp;码：
                             </div>
                             <div class="reg-c">
-                                <input type="password" id="userPass" name="userPass" class="txt" value=""/>
+                                <input type="password" id="userPass" name="userPass" class="txt" value="" onblur="existPass()"/>
+                                <br/>
+                                <p id="passMsg"></p>
                             </div>
-                            <span class="tips">密码长度必须6~10位的英文或数字</span>
+                            <span class="tips">密码长度必须6~20位的英文或数字</span>
                         </li>
                         <li class="no-tips">
                             <div class="reg-l">&nbsp;&nbsp;邮&nbsp;&nbsp;&nbsp;箱：</div>
                             <div class="reg-c">
-                                <input type="text" id="email" name="email" class="txt" value=""/>
+                                <input type="text" id="email" name="email" class="txt" value="" onblur="existemail()"/>
                             </div>
+                            <span id="emailMsg" class="tips" style="color: red"></span>
                         </li>
                         <li>
                             <div class="reg-l"></div>

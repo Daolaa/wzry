@@ -1,11 +1,14 @@
 package com.bbs.controller;
 
 import com.bbs.domain.Upvote;
+import com.bbs.domain.User;
 import com.bbs.service.UpvoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -24,8 +27,9 @@ public class UpvoteController {
      */
     @RequestMapping("/addUpvote.do")
     @ResponseBody
-    public boolean addUpvote(Upvote upvote){
-        upvote.setUpvoteUserName("战神");//设置评论人
+    public boolean addUpvote(Upvote upvote, HttpServletRequest request){
+        User user = (User) request.getSession().getAttribute("user");
+        upvote.setUpvoteUserName(user.getUserName());//设置评论人
         upvoteService.addUpvote(upvote);
         return true;
     }
@@ -49,9 +53,10 @@ public class UpvoteController {
 
     @RequestMapping("/isUpvote.do")
     @ResponseBody
-    public Integer isUpvote(String articleId){
+    public Integer isUpvote(String articleId,HttpServletRequest request){
         //获取用户名
-        String username = "战神"; //数据写死了
+        User user = (User) request.getSession().getAttribute("user");
+        String username = user.getUserName();
 
         //1:已赞 0:未查到点赞记录
         return upvoteService.findUpvoteByNameAndArticleId(articleId, username);

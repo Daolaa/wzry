@@ -2,7 +2,6 @@ package com.bbs.controller;
 
 import com.bbs.domain.User;
 import com.bbs.service.UserService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.UUID;
 import java.util.List;
 
@@ -29,14 +29,26 @@ public class UserController {
      *
      */
     @RequestMapping("/login")
-    public String login(@RequestParam("userName") String username, @RequestParam("userPass") String password, HttpSession session) {
+    @ResponseBody
+    public boolean login(@RequestParam("userName") String username, @RequestParam("userPass") String password, HttpSession session) {
         User user = userService.login(username, password);
         if (user != null) {
             session.setAttribute("user", user);
-            return "user_info";
+            return true;
         } else {
-            return "login_error";
+            return false;
         }
+    }
+
+    /**
+     * 注销
+     * @param request
+     * @return
+     */
+    @RequestMapping("/loginOut.do")
+    public String loginOut(HttpServletRequest request){
+        request.getSession().invalidate();
+        return "redirect:/html/index.html";
     }
 
     /**
@@ -62,12 +74,14 @@ public class UserController {
         // 如果数据库中没有该用户，可以注册，否则跳转页面
         user.setTalkStatus(0);
         user.setRole(1);
+        user.setLoginStatus(0);
+        user.setLastLoginTime(new Date());
         if (userService.findUserByuserName(username) == null) {
             // 添加用户
             userService.userRegist(user);
             request.getSession(true).setAttribute("user", user);
             // 注册成功跳转到主页面
-            return "user_info";
+            return "index";
         } else {
             // 注册失败跳转到错误页面
             return "regist_error";
@@ -131,10 +145,12 @@ public class UserController {
      */
     @RequestMapping("/findUserById.do")
     @ResponseBody
-    public  User findUserById(){
-        //可以在域中获取 不查了
-        User user = new User();
-        user.setUserName("admin");
+    public  User findUserById(HttpServletRequest request){
+        //从域中获取用户信息
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null){
+            return null;
+        }
         return user;
     }
 
@@ -184,12 +200,18 @@ public class UserController {
         return userService.updataPsd(username,password,newPsd);
     }
 
+    /**
+     * 用户升级
+     * @param articleNum
+     * @param request
+     * @return
+     */
     @RequestMapping("/updataRole.do")
     @ResponseBody
-    public boolean updataRole(String articleNum){
-        //写死了
-        String username = "admin";
-        return userService.updataRole(articleNum,username);
+    public boolean updataRole(String articleNum ,HttpServletRequest request){
+        //从域中获取用户信息
+        User user = (User) request.getSession().getAttribute("user");
+        return userService.updataRole(articleNum,user.getUserName());
     }
 
 }

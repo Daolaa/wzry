@@ -1,11 +1,13 @@
 package com.bbs.controller;
 
 import com.bbs.domain.Report;
+import com.bbs.domain.User;
 import com.bbs.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @Controller
@@ -20,9 +22,10 @@ public class ReportController {
      * @param report
      */
     @RequestMapping("/addReport.do")
-    public String addReport(Report report){
+    public String addReport(Report report, HttpServletRequest request){
         //获取举报人
-        report.setReportUserName("战士");
+        User user = (User) request.getSession().getAttribute("user");
+        report.setReportUserName(user.getUserName());
         //设置举报时间
         report.setReportTime(new Date());
         //设置举报状态

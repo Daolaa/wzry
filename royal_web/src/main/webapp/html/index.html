@@ -14,7 +14,7 @@
 
         // 统计帖子数
         $(function () {
-            $.post("/article/countArticle.do","",function (data) {
+            $.post("/article/countArticle.do", "", function (data) {
                 $("#countToday").text(data[1]);
                 $("#countAll").text(data[0]);
             });
@@ -27,26 +27,26 @@
         $(function () {
             //获取区域id
             var zoneId = getParameter("zoneId");
-            if(zoneId == null){
+            if (zoneId == null) {
                 zoneId = 1;
             }
             //这里是给隐藏域添加区域id 为的是发布帖子时有区域id
-            $("#zoneId").prop("value",zoneId);
+            $("#zoneId").prop("value", zoneId);
 
             //这里是区域导航
-            $.post("/zone/findAll.do",{},function (data) {
+            $.post("/zone/findAll.do", {}, function (data) {
 
                 var str = "";
-                $.each(data,function (index, ele) {
+                $.each(data, function (index, ele) {
 
-                    if(ele.zoneId == zoneId){
+                    if (ele.zoneId == zoneId) {
                         str += "<li class=\"current\">\n" +
-                    "                <a href=\"/html/index.html?zoneId="+ele.zoneId+"\" ><em></em>"+ele.zoneName+"</a>\n" +
-                    "            </li>"
-                    }else {
+                            "                <a href=\"/html/index.html?zoneId=" + ele.zoneId + "\" ><em></em>" + ele.zoneName + "</a>\n" +
+                            "            </li>"
+                    } else {
                         str += "<li>\n" +
-                    "                <a href=\"/html/index.html?zoneId="+ele.zoneId+"\" ><em></em>"+ele.zoneName+"</a>\n" +
-                    "            </li>"
+                            "                <a href=\"/html/index.html?zoneId=" + ele.zoneId + "\" ><em></em>" + ele.zoneName + "</a>\n" +
+                            "            </li>"
                     }
                 })
 
@@ -55,33 +55,33 @@
             })
 
             //这里是区域信息
-            $.post("/article/findByZoneId.do",{zoneId:zoneId},function (data) {
+            $.post("/article/findByZoneId.do", {zoneId: zoneId}, function (data) {
                 var str = "";
                 //这个遍历是先遍历置顶的
-                $.each(data,function (index, ele) {
-                    if (ele.isTop == 1 && ele.isReport !=1) {
+                $.each(data, function (index, ele) {
+                    if (ele.isTop == 1 && ele.isReport != 1) {
                         str += "<li class=\"clearfix ding\">\n" +
-        "                        <div class=\"hm-index-title\">\n" +
-        "                            <i class=\"set-to-top\">顶</i> <a href=\"/html/getArticle.html?articleId="+ele.articleId+"\">" + ele.title + "</a>\n" +
-        "                        </div>\n" +
-        "                        <div class=\"hm-index-con\">" + ele.content + "</div>\n" +
-        "                        <div class=\"hm-index-info l\">\n" +
-        "                            <span class=\"article-username\">" + ele.senderName + "</span>\n" +
-        "                            <span class=\"post-time\">" + ele.sendTimeStr + "</span>\n" +
-        "                        </div>\n" +
-        "                        <div class=\"hm-index-fun r\">\n" +
-        "                            <span class=\"icon-like\"><i></i>" + ele.upvoteCount + "</span>\n" +
-        "                            <span class=\"icon-talk\"><i></i>" + ele.replyCount + "</span>\n" +
-        "                        </div>\n" +
-        "                    </li>"
+                            "                        <div class=\"hm-index-title\">\n" +
+                            "                            <i class=\"set-to-top\">顶</i> <a href=\"/html/getArticle.html?articleId=" + ele.articleId + "\">" + ele.title + "</a>\n" +
+                            "                        </div>\n" +
+                            "                        <div class=\"hm-index-con\">" + ele.content + "</div>\n" +
+                            "                        <div class=\"hm-index-info l\">\n" +
+                            "                            <span class=\"article-username\">" + ele.senderName + "</span>\n" +
+                            "                            <span class=\"post-time\">" + ele.sendTimeStr + "</span>\n" +
+                            "                        </div>\n" +
+                            "                        <div class=\"hm-index-fun r\">\n" +
+                            "                            <span class=\"icon-like\"><i></i>" + ele.upvoteCount + "</span>\n" +
+                            "                            <span class=\"icon-talk\"><i></i>" + ele.replyCount + "</span>\n" +
+                            "                        </div>\n" +
+                            "                    </li>"
                     }
                 })
                 //这个遍历是没有置顶的
-                $.each(data,function (index, ele) {
-                    if (ele.isTop == 0 && ele.isReport !=1) {
+                $.each(data, function (index, ele) {
+                    if (ele.isTop == 0 && ele.isReport != 1) {
                         str += "<li class=\"clearfix\">\n" +
                             "    <div class=\"hm-index-title\">\n" +
-                            "        <i class=\"set-to-top\">顶</i> <a href=\"/html/getArticle.html?articleId="+ele.articleId+"\">" + ele.title + "</a>\n" +
+                            "        <i class=\"set-to-top\">顶</i> <a href=\"/html/getArticle.html?articleId=" + ele.articleId + "\">" + ele.title + "</a>\n" +
                             "    </div>\n" +
                             "    <div class=\"hm-index-con\">" + ele.content + "</div>\n" +
                             "    <div class=\"hm-index-info l\">\n" +
@@ -100,16 +100,41 @@
             //这里是表单提交后获取提交的帖子的id 然后要跳转到getArticle.html页面
             // 去那里查询该帖信息回显到页面
             $("#button").click(function () {
-                $.post("/article/save.do",$("#form").serialize(),function (data) {
+                $.post("/article/save.do", $("#form").serialize(), function (data) {
                     var id = data;
-                    location.href = "/html/getArticle.html?articleId="+id;
+                    location.href = "/html/getArticle.html?articleId=" + id;
                 });
             });
 
         })
 
+        //加载页面用户信息
+        $(function () {
+            $.post("/user/findUserById.do", {}, function (data) {
+                if (data.userName != undefined && data.roleStr !=undefined) {
+                    $("#top_type").empty();
+                    var a = "<a href=\"javascript:;\" class=\"to-login\">欢迎"+data.roleStr+":"+data.userName+"</a>" +
+                        "    <a href=\"/html/user_info.html\">个人中心</a>\n" +
+                        "    <a href=\"/user/loginOut.do\">注销</a>";
+                    $("#top_type").append(a);
+                    $("#showTopicBtn").css("visibility", "visible")
+                }
+            });
+        });
 
-
+        //用户登录
+        $(function () {
+            $("#btn_login").click(function () {
+                $.post("/user/login.do", $("#form_login").serialize(), function (data) {
+                    var flag = data;
+                    if (flag) {
+                        location = "/html/index.html";
+                    } else {
+                        location = "/html/login_error.html";
+                    }
+                });
+            });
+        })
     </script>
 
 </head>
@@ -120,19 +145,22 @@
         <div class="hm-inner-l l"></div>
         <div class="hm-inner-r r">
             <div class="box">
-                <a href="javascript:;" id="login" class="to-login">游客登录</a>
-                <a href="register.html">【新用户注册】</a>
+                <div id="top_type">
+                    <a href="javascript:;" id="login" class="to-login">游客登录</a>
+                    <a href="/html/register.html" >【新用户注册】</a>
+                </div>
                 <div id="dialogBg"></div>
                 <div id="dialog" class="animated">
                     <img class="dialogIco" width="50" height="40" src="../images/ico.png"/>
                     <div class="dialogTop" style="height:25px;">
                         <a href="javascript:;" class="closeDialogBtn">关闭</a>
                     </div>
-                    <form action="/user/login.do" >
+                    <form action="#" method="post" id="form_login">
                         <ul class="editInfos">
                             <li>用户名：<input type="text" id="userName" name="userName" class="ipt"/></li>
-                            <li>密&nbsp;&nbsp;&nbsp;码：<input type="password" id="userPass" name="userPass" class="ipt"/></li>
-                            <li><input type="submit" value="登录" class="submitBtn"/></li>
+                            <li>密&nbsp;&nbsp;&nbsp;码：<input type="password" id="userPass" name="userPass" class="ipt"/>
+                            </li>
+                            <li><input type="button" id="btn_login" value="登录" class="submitBtn"/></li>
                         </ul>
                     </form>
                 </div>
@@ -147,8 +175,6 @@
 <div class="hm-body hm-body-bgc">
     <div class="hm-inner">
         <div class="hm-banner"></div>
-
-
 
 
         <!--头部，帖子统计，搜索-->
@@ -174,41 +200,41 @@
         <script>
             $(function () {
                 $("#form_serch").submit(function () {
-                    $.post("/article/findByTitle",$("#form_serch").serialize(),function (data) {
+                    $.post("/article/findByTitle", $("#form_serch").serialize(), function (data) {
                         //获取ul
                         var ul = $("#article_ul");
                         ul.html(null);
                         $(data).each(function () {
-                            if (this.isTop==1) {//创建li
+                            if (this.isTop == 1) {//创建li
                                 var li =
                                     "<li class=\"clearfix ding\">\n" +
                                     "<div class=\"hm-index-title\">\n" +
-                                    "<i class=\"set-to-top\">顶</i> <a href=\"getArticle.html\">"+this.title+"</a>\n" + "</div>\n" +
+                                    "<i class=\"set-to-top\">顶</i> <a href=\"getArticle.html\">" + this.title + "</a>\n" + "</div>\n" +
                                     " <div class=\"hm-index-info l\">\n" +
-                                    "    <span class=\"article-username\">"+this.senderName+"</span>\n" +
-                                    "      <span class=\"post-time\">"+this.sendTimeStr+"</span>\n" +
+                                    "    <span class=\"article-username\">" + this.senderName + "</span>\n" +
+                                    "      <span class=\"post-time\">" + this.sendTimeStr + "</span>\n" +
                                     "  </div>\n" +
                                     "  <div class=\"hm-index-fun r\">\n" +
-                                    "      <span class=\"icon-like\"><i></i>"+ this.upvoteCount +"</span>\n" +
-                                    "  <span class=\"icon-talk\"><i></i>"+ this.replyCount+"</span>\n" +
+                                    "      <span class=\"icon-like\"><i></i>" + this.upvoteCount + "</span>\n" +
+                                    "  <span class=\"icon-talk\"><i></i>" + this.replyCount + "</span>\n" +
                                     "  </div>\n" +
                                     "  </li>"
                                 //调用ul添加li
                                 ul.append(li);
 
-                            }else if (this.isTop==0) {
+                            } else if (this.isTop == 0) {
                                 //创建li
                                 var li =
                                     "<li class=\"clearfix\">\n" +
                                     "<div class=\"hm-index-title\">\n" +
-                                    "<i class=\"set-to-top\">顶</i> <a href=\"getArticle.html\">"+this.title+"</a>\n" + "</div>\n" +
+                                    "<i class=\"set-to-top\">顶</i> <a href=\"getArticle.html\">" + this.title + "</a>\n" + "</div>\n" +
                                     " <div class=\"hm-index-info l\">\n" +
-                                    "    <span class=\"article-username\">"+this.senderName+"</span>\n" +
-                                    "      <span class=\"post-time\">"+this.sendTimeStr+"</span>\n" +
+                                    "    <span class=\"article-username\">" + this.senderName + "</span>\n" +
+                                    "      <span class=\"post-time\">" + this.sendTimeStr + "</span>\n" +
                                     "  </div>\n" +
                                     "  <div class=\"hm-index-fun r\">\n" +
-                                    "      <span class=\"icon-like\"><i></i>"+ this.upvoteCount +"</span>\n" +
-                                    "  <span class=\"icon-talk\"><i></i>"+ this.replyCount+"</span>\n" +
+                                    "      <span class=\"icon-like\"><i></i>" + this.upvoteCount + "</span>\n" +
+                                    "  <span class=\"icon-talk\"><i></i>" + this.replyCount + "</span>\n" +
                                     "  </div>\n" +
                                     "  </li>"
                                 //调用ul添加li
@@ -216,19 +242,16 @@
                             }
 
                         });
-                    },"json");
+                    }, "json");
                 });
             })
         </script>
-
 
 
         <!-- 导航 -->
         <ul class="hm-bbs-nav border-lrb clearfix" id="navigation_ul">
             <!--导航板块-->
         </ul>
-
-
 
 
         <!-- 主体部分 -->
@@ -239,9 +262,6 @@
 
                 </ul>
             </div>
-
-
-
 
 
             <!-- 右侧侧边栏,在线用户 -->
@@ -255,31 +275,31 @@
                         <script>
                             $(function () {
                                 $("#loginUser").click(function () {
-                                    $.get("/user/findAll",{},function (data) {
+                                    $.get("/user/findAll", {}, function (data) {
                                         var ul = $("#loginUserUl");
                                         ul.html(null);
-                                        var count= 0;
+                                        var count = 0;
                                         $(data).each(function () {
-                                            if (this.loginStatus ==1){
-                                                count  += 1;
+                                            if (this.loginStatus == 1) {
+                                                count += 1;
                                                 var li =
-                                                        "<li>/n"+
-                                                        "<div><img src='"+this.picUrl+" '+ height='55'/> </div>\n"+
-                                                        "<p>"+this.userName+"</p>\n"+
-                                                        "</li>";
+                                                    "<li>/n" +
+                                                    "<div><img src='" + this.picUrl + " '+ height='55'/> </div>\n" +
+                                                    "<p>" + this.userName + "</p>\n" +
+                                                    "</li>";
 
                                                 ul.append(li);
                                             }
 
                                         });
-                                        $("#loginUser").html("在线用户"+count);
+                                        $("#loginUser").html("在线用户" + count);
                                     });
 
                                 });
                             });
                         </script>
                         <li>
-                            <div><img src="../images/default.png" height="55"/> </div>
+                            <div><img src="../images/default.png" height="55"/></div>
                             <p>Mr.King</p>
                         </li>
                         <li>
@@ -291,7 +311,6 @@
                     </ul>
                 </div>
             </div>
-
 
 
         </div>
@@ -311,7 +330,9 @@
 
 <!-- 右边发帖，回顶部 -->
 <div class="fixedBar" id="j_fixedBar">
+    <div id="showTopicBtn" style="visibility: hidden">
     <a id="newTopicBtn" href="javascript:;" class="newTopic"><span></span>发帖</a>
+    </div>
     <a href="#" class="goTop"><i></i><span>返回<br/>顶部</span></a>
 </div>
 
@@ -330,8 +351,8 @@
                 <div class="win_bd_b">
                     <textarea id="content" name="content" placeholder="正文"></textarea>
                 </div>
-                    <!--这里是一个隐藏域 为的是提交的帖子有区域id -->
-                    <input id="zoneId" type="hidden" name="zoneId"/>
+                <!--这里是一个隐藏域 为的是提交的帖子有区域id -->
+                <input id="zoneId" type="hidden" name="zoneId"/>
             </div>
             <div class="win_ft">
                 <div class="win_ft_in">
@@ -346,30 +367,30 @@
 </body>
 </html>
 <script type="text/javascript">
-  $(function () {
-      //显示弹框
-      $('.box #login').click(function () {
-          var className = $(this).attr('class');
-          $('#dialogBg').fadeIn(300);
-          $('#dialog').removeAttr('class').addClass('animated ' + className + '').fadeIn();
-          $('#userName').focus();
-          $("#j_fixedBar").hide();
-      });
+    $(function () {
+        //显示弹框
+        $('.box #login').click(function () {
+            var className = $(this).attr('class');
+            $('#dialogBg').fadeIn(300);
+            $('#dialog').removeAttr('class').addClass('animated ' + className + '').fadeIn();
+            $('#userName').focus();
+            $("#j_fixedBar").hide();
+        });
 
-      //关闭弹窗
-      $('.closeDialogBtn').click(function () {
-          $('#dialogBg').fadeOut(300, function () {
-              $('#dialog').addClass('bounceOutUp').fadeOut();
-              $("#j_fixedBar").show();
-          });
-      });
+        //关闭弹窗
+        $('.closeDialogBtn').click(function () {
+            $('#dialogBg').fadeOut(300, function () {
+                $('#dialog').addClass('bounceOutUp').fadeOut();
+                $("#j_fixedBar").show();
+            });
+        });
 
-      //查询用户是否登录
-      $.post("/user/findUser.do",{},function(data){
+        //查询用户是否登录
+        $.post("/user/findUser.do", {}, function (data) {
 
-          alert(data);
-      })
-  });
+            alert(data);
+        })
+    });
 
 
 </script>

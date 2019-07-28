@@ -23,7 +23,7 @@ public class ZoneapplyServiceImpl implements ZoneapplyService {
      */
     @Override
     public boolean addZoneapply(Zoneapply zoneapply) {
-        Zone zone = zoneDao.findZoneByName(zoneapply.getUserName());
+        Zone zone = zoneDao.findZoneByName(zoneapply.getZoneName());
 
         if (zone !=null){
             return false;

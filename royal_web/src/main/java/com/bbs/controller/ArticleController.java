@@ -1,6 +1,7 @@
 package com.bbs.controller;
 
 import com.bbs.domain.Article;
+import com.bbs.domain.User;
 import com.bbs.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,8 +25,8 @@ public class ArticleController {
     @RequestMapping("/save.do")
     @ResponseBody
     public Integer save(Article article, HttpServletRequest request){
-//        String userName = (String) request.getSession().getAttribute("userName");
-        article.setSenderName("高高");
+        User user = (User) request.getSession().getAttribute("user");
+        article.setSenderName(user.getUserName());
         Date date = new Date();
         article.setSendTime(date);
         article.setIsTop(0);
@@ -77,9 +78,9 @@ public class ArticleController {
      */
     @RequestMapping("/countArticleByuserName.do")
     @ResponseBody
-    public Integer countArticleByuserName(){
-        //用户名写死了
-        String userName = "admin";
+    public Integer countArticleByuserName(HttpServletRequest request){
+        User user = (User) request.getSession().getAttribute("user");
+        String userName = user.getUserName();
         return articleService.countArticleByuserName(userName);
     }
 

@@ -1,6 +1,7 @@
 package com.bbs.controller;
 
 import com.bbs.domain.Reply;
+import com.bbs.domain.User;
 import com.bbs.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,8 @@ public class ReplyController {
         //添加回复时间
         reply.setReplyTime(new Date());
         //添加回复用户 从session域获取
-        reply.setReplyUserName("战神");
+        User user = (User) request.getSession().getAttribute("user");
+        reply.setReplyUserName(user.getUserName());
         replyService.addReplyByCommentId(reply);
 
 

@@ -10,18 +10,28 @@
     <script type="text/javascript" src="../js/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="../js/hm-bbs.js"></script>
     <style type="text/css">
-        .hm-header-b { border-bottom: 1px solid #d9d9d9; }
+        .hm-header-b {
+            border-bottom: 1px solid #d9d9d9;
+        }
     </style>
 
     <!--加载页面用户信息-->
     <script>
         $(function () {
             //加载用户信息
-            $.post("/user/findUserById.do",{},function (data) {
+            $.post("/user/findUserById.do", {}, function (data) {
                 $("#username_r").val(data.userName);
                 $("#userName_top").text(data.userName);
                 $("#username_l").text(data.userName);
-                $("#image").attr("src","../images/banner.jpg");
+                $("#image").attr("src", data.picUrl);
+                if (data.role == 1) {
+                    var li = "<li><a href=\"/html/user_update.html\">申请高级用户</a></li>"
+                    $("#user-r").append(li)
+                }if (data.role == 2) {
+                    var li = "<li><a href=\"/html/user_newzone.html\">开辟新版块</a></li>"
+                    $("#user-r").append(li)
+                }
+
             });
         });
     </script>
@@ -37,7 +47,7 @@
         <div class="hm-inner-r r">
             <div class="box">
                 欢迎<a href="user_info.html" style="margin-right:0px;padding:0px 5px;color:blue;" id="userName_top"></a>回来！
-                <a href="#">【注销】</a>
+                <a href="/user/loginOut.do">【注销】</a>
                 <div id="dialogBg"></div>
                 <div id="dialog" class="animated">
                     <img class="dialogIco" width="50" height="40" src="../images/ico.png"/>
@@ -58,7 +68,6 @@
         </div>
     </div>
 </div>
-
 
 
 <!--头部信息-->
@@ -83,7 +92,6 @@
 </div>
 
 
-
 <div class="hm-body hm-body-bgc">
     <div class="hm-inner">
         <div class="user-info clearfix">
@@ -104,10 +112,9 @@
 
             <!--右侧用户信息-->
             <div class="user-info-r r">
-                <ul class="clearfix hd">
+                <ul class="clearfix hd" id="user-r">
                     <li class="cur"><a href="/html/user_info.html">个人信息</a></li>
                     <li><a href="/html/user_pwd.html">修改密码</a></li>
-                    <li><a href="/html/user_update.html">申请高级用户</a></li>
                 </ul>
 
 
@@ -115,7 +122,8 @@
                     <ul class="bd">
                         <li class="clearfix">
                             <div class="info-l"><i class="red">*</i>用户名：</div>
-                            <div class="info-r"><input type="text" name="username" class="txt" value="" readonly="readonly" id="username_r"/></div>
+                            <div class="info-r"><input type="text" name="username" class="txt" value=""
+                                                       readonly="readonly" id="username_r"/></div>
                         </li>
                         <li class="clearfix">
                             <div class="info-l">邮箱地址：</div>
@@ -153,7 +161,6 @@
         </div>
     </div>
 </div>
-
 
 
 </body>
