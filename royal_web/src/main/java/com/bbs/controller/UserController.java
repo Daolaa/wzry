@@ -75,6 +75,7 @@ public class UserController {
         user.setTalkStatus(0);
         user.setRole(1);
         user.setLoginStatus(0);
+        user.setUpdateStatus(0);
         user.setLastLoginTime(new Date());
         if (userService.findUserByuserName(username) == null) {
             // 添加用户
